@@ -29,10 +29,14 @@ abstract class AbstractThrowableToNormalizableAdapter extends AbstractNormalizab
         return $this->throwable;
     }
 
+    /**
+     * @return  array<string, mixed>
+     */
     public function getNormalizedThrowable(Throwable $throwable): array
     {
-        $previousOrTrace = $throwable->getPrevious()
-            ? ['previous' => $this->getNormalizedThrowable($throwable->getPrevious())]
+        $previous = $throwable->getPrevious();
+        $previousOrTrace = ($previous instanceof Throwable)
+            ? ['previous' => $this->getNormalizedThrowable($previous)]
             : ['trace' => $throwable->getTrace()];
         return [
             'message' => $throwable->getMessage(),

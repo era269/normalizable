@@ -13,7 +13,7 @@ trait AbstractNormalizableTrait
      */
     public function normalize(): array
     {
-        return [$this->getTypeFieldName() => $this->getObjectForNormalization()::class]
+        return [$this->getTypeFieldName() => get_class($this->getObjectForNormalization())]
             + $this->getNormalized();
     }
 
@@ -22,16 +22,13 @@ trait AbstractNormalizableTrait
         return NormalizableInterface::DEFAULT_FIELD_NAME_TYPE;
     }
 
-    /**
-     * @return string
-     */
     protected function getObjectForNormalization(): object
     {
         return $this;
     }
 
     /**
-     * @return array<string, string|int|array|bool|float|null>
+     * @return array<string, mixed>
      */
     abstract protected function getNormalized(): array;
 }
