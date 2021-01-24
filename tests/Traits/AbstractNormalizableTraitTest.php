@@ -9,11 +9,15 @@ use Era269\Normalizable\Traits\AbstractNormalizableTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Era269\Normalizable\AbstractNormalizableObject
+ */
 class AbstractNormalizableTraitTest extends TestCase
 {
-    private const NORMALIZED                         = [
+    private const NORMALIZED = [
         'normalizedDataKey' => 'normalizedDataValue'
     ];
+
     private const NORMALIZABLE_TRAIT_MOCK_CLASS_NAME = 'UnitTestAbstractNormalizableTraitMock';
 
     private const TYPE_FIELD_NAME_DEFAULT = '@type';

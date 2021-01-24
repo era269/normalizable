@@ -12,37 +12,33 @@ abstract class AbstractThrowableToNormalizableAdapter extends AbstractNormalizab
 {
     private Throwable $throwable;
 
-    public function __construct(Throwable $throwable)
+    final public function __construct(Throwable $throwable)
     {
         $this->throwable = $throwable;
     }
 
-    protected function getNormalized(): array
+    final protected function getNormalized(): array
     {
-        return $this->getNormalizedThrowable(
-            $this->getNormalizableObject()
-        );
+        $throwable = $this->throwable;
+        $previous = $throwable->getPrevious();
+        $previousOrTrace = ($previous instanceof Throwable)
+            ? ['previous' => (new static($previous))->normalize()]
+            : ['trace' => $this->getTrace($throwable)];
+        return [
+                'message' => $throwable->getMessage(),
+                'code' => $throwable->getCode(),
+                'file' => $throwable->getFile(),
+                'line' => $throwable->getLine(),
+            ] + $previousOrTrace;
     }
 
-    protected function getNormalizableObject(): Throwable
+    final protected function getObjectForNormalization(): Throwable
     {
         return $this->throwable;
     }
 
     /**
-     * @return  array<string, mixed>
+     * @return string|array<string, mixed>
      */
-    public function getNormalizedThrowable(Throwable $throwable): array
-    {
-        $previous = $throwable->getPrevious();
-        $previousOrTrace = ($previous instanceof Throwable)
-            ? ['previous' => $this->getNormalizedThrowable($previous)]
-            : ['trace' => $throwable->getTrace()];
-        return [
-            'message' => $throwable->getMessage(),
-            'code' => $throwable->getCode(),
-            'file' => $throwable->getFile(),
-            'line' => $throwable->getLine(),
-        ] + $previousOrTrace;
-    }
+    abstract protected function getTrace(Throwable $throwable): string|array;
 }
