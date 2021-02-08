@@ -12,7 +12,7 @@ final class ThrowableToNormalizableAdapter extends AbstractThrowableToNormalizab
     /**
      * @inheritDoc
      */
-    protected function getTrace(Throwable $throwable): string|array
+    protected function getTrace(Throwable $throwable): array
     {
         return $throwable->getTrace();
     }

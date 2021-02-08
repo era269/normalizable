@@ -15,7 +15,10 @@ abstract class AbstractDateTimeNormalizable extends DateTime implements Normaliz
 {
     use AbstractNormalizableTrait;
 
-    public static function denormalize(array $data): static
+    /**
+     * ToDo: return "static" with php 8
+     */
+    public static function denormalize(array $data): self
     {
         return new static(
             $data[static::getDateTimeFieldName()]

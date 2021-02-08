@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "php": "^8.0"
+    "php": "^7.4"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.4",
@@ -18,7 +18,7 @@
   },
   "config": {
     "platform": {
-      "php": "8.0"
+      "php": "7.4"
     },
     "optimize-autoloader": true,
     "sort-packages": true

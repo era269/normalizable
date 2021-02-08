@@ -38,7 +38,7 @@ abstract class AbstractThrowableToNormalizableAdapter extends AbstractNormalizab
     }
 
     /**
-     * @return string|array<string, mixed>
+     * @return array<string, mixed>
      */
-    abstract protected function getTrace(Throwable $throwable): string|array;
+    abstract protected function getTrace(Throwable $throwable): array;
 }
