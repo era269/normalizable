@@ -45,7 +45,7 @@ class ThrowableToNormalizableAdapterTest extends TestCase
     {
         self::assertInstanceOf(Throwable::class, $throwable);
         self::assertEquals(
-            $throwable::class,
+            get_class($throwable),
             $normalized['@type']
         );
         foreach ($hasKeys as $hasKey) {

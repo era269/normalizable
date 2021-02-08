@@ -14,7 +14,7 @@ class DateTimeRfc3339NormalizableTest extends TestCase
 
         self::assertEquals(
             [
-                '@type' => $datetime::class,
+                '@type' => get_class($datetime),
                 'dateTime' => $datetime->format(DATE_RFC3339),
             ],
             $datetime->normalize()
