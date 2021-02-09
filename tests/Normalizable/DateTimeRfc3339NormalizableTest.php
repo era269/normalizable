@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Era269\Normalizable\Tests\Adapter;
+namespace Era269\Normalizable\Tests\Normalizable;
 
 use Era269\Normalizable\Normalizable\DateTimeRfc3339Normalizable;
 use PHPUnit\Framework\TestCase;
@@ -29,8 +29,8 @@ class DateTimeRfc3339NormalizableTest extends TestCase
     public function testDenormalize(DateTimeRfc3339Normalizable $dateTime): void
     {
         self::assertEquals(
-            $dateTime,
-            DateTimeRfc3339Normalizable::denormalize($dateTime->normalize())
+            $dateTime->normalize(),
+            DateTimeRfc3339Normalizable::denormalize($dateTime->normalize())->normalize()
         );
     }
 }

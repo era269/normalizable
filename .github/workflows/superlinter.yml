@@ -29,16 +29,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run Install
-        run: |
-
-          composer install
+      - name: Install
+        run: composer install
       #
       #      - name: Run Static code Analysis
       #        run: vendor/bin/phpstan analyse --error-format=github
       #
-      #      - name: Run Unit Tests
-      #        run: vendor/phpunit/phpunit/phpunit
+      - name: Unit Tests
+        run: vendor/phpunit/phpunit/phpunit
 
       # Runs the Super-Linter action
       - name: Run Super-Linter
@@ -59,3 +57,4 @@ jobs:
           VALIDATE_GO: false
           VALIDATE_TERRAFORM: false
           VALIDATE_CSS: false
+          FILTER_REGEX_INCLUDE: .*src/.*
