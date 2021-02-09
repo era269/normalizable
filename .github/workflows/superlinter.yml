@@ -49,7 +49,6 @@ jobs:
         #        uses: github/super-linter@v3
         uses: docker://github/super-linter:latest
         env:
-          PHP_VERSION_ID: 80000
           ACTIONS_RUNNER_DEBUG: true
           VALIDATE_ALL_CODEBASE: false
           FILTER_REGEX_INCLUDE: .*src/.*
