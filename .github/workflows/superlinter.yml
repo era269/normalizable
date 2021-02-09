@@ -58,3 +58,4 @@ jobs:
           VALIDATE_TERRAFORM: false
           VALIDATE_CSS: false
           FILTER_REGEX_INCLUDE: .*src/.*
+          FILTER_REGEX_EXCLUDE: .*(tests|vendor)/.*
