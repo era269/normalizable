@@ -31,8 +31,6 @@ jobs:
 
       - name: Install
         run: |
-          sudo a2dismod php7.3
-          sudo a2enmod php7.4
           composer install
       #
       #      - name: Run Static code Analysis
@@ -43,12 +41,13 @@ jobs:
 
       # Runs the Super-Linter action
       - name: Run Super-Linter
-        uses: github/super-linter@v3
+        #        uses: github/super-linter@v3
+        uses: docker://github/super-linter:latest
         env:
           ACTIONS_RUNNER_DEBUG: true
           VALIDATE_ALL_CODEBASE: false
           FILTER_REGEX_INCLUDE: .*src/.*
-#          FILTER_REGEX_EXCLUDE: .*(tests|vendor)/.*
+          #          FILTER_REGEX_EXCLUDE: .*(tests|vendor)/.*
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_PERL: false
