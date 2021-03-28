@@ -13,8 +13,13 @@ trait AbstractNormalizableTrait
      */
     public function normalize(): array
     {
-        return [$this->getTypeFieldName() => get_class($this->getObjectForNormalization())]
+        return [$this->getTypeFieldName() => $this->getType()]
             + $this->getNormalized();
+    }
+
+    public function getType(): string
+    {
+        return $this->getObjectForNormalization()::class;
     }
 
     protected function getTypeFieldName(): string
