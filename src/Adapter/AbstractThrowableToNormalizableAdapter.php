@@ -9,13 +9,16 @@ use Throwable;
 
 abstract class AbstractThrowableToNormalizableAdapter extends AbstractNormalizableObject
 {
-    private Throwable $throwable;
-
-    final public function __construct(Throwable $throwable)
+    final public function __construct(
+        private Throwable $throwable
+    )
     {
-        $this->throwable = $throwable;
+
     }
 
+    /**
+     * @inheritDoc
+     */
     final protected function getNormalized(): array
     {
         $throwable = $this->throwable;

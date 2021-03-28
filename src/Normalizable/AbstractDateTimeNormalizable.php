@@ -10,6 +10,8 @@ use DateTimeZone;
 use Era269\Normalizable\DenormalizableInterface;
 use Era269\Normalizable\NormalizableInterface;
 use Era269\Normalizable\Traits\AbstractNormalizableTrait;
+use Exception;
+use UnexpectedValueException;
 
 abstract class AbstractDateTimeNormalizable extends DateTime implements NormalizableInterface, DenormalizableInterface
 {
@@ -21,20 +23,24 @@ abstract class AbstractDateTimeNormalizable extends DateTime implements Normaliz
     }
 
     /**
-     * ToDo: return "static" with php 8
      * @inheritDoc
      */
-    public static function denormalize(array $data): self
+    public static function denormalize(array $data): static
     {
-        return new static(
-            $data[static::getDateTimeFieldName()]
-        );
+        try {
+            return new static(
+                $data[static::getDateTimeFieldName()]
+            );
+        } catch (Exception $exception) {
+            $message = sprintf('Cannot denormalize "%s"', static::class);
+            throw new UnexpectedValueException($message, 0, $exception);
+        }
     }
 
     abstract protected static function getDateTimeFieldName(): string;
 
     /**
-     * @inheritDoc
+     * @return array<string, string>
      */
     public function getNormalized(): array
     {
