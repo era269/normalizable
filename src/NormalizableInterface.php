@@ -12,4 +12,6 @@ interface NormalizableInterface
      * @return array<string, mixed> Only scalar types in values
      */
     public function normalize(): array;
+
+    public function getType(): string;
 }
