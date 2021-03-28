@@ -6,6 +6,7 @@ namespace Era269\Normalizable\Normalizable;
 
 use DateTime;
 use DateTimeInterface;
+use DateTimeZone;
 use Era269\Normalizable\DenormalizableInterface;
 use Era269\Normalizable\NormalizableInterface;
 use Era269\Normalizable\Traits\AbstractNormalizableTrait;
@@ -14,8 +15,14 @@ abstract class AbstractDateTimeNormalizable extends DateTime implements Normaliz
 {
     use AbstractNormalizableTrait;
 
+    final public function __construct(string $datetime = 'now', DateTimeZone $timezone = null)
+    {
+        parent::__construct($datetime, $timezone);
+    }
+
     /**
      * ToDo: return "static" with php 8
+     * @inheritDoc
      */
     public static function denormalize(array $data): self
     {

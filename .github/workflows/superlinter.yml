@@ -30,28 +30,16 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install
-        run: |
-          composer install
-      #          sudo apt-get update
-      #          sudo apt -y install software-properties-common
-      #          sudo add-apt-repository ppa:ondrej/php
-      #          sudo apt-get update
-      #          sudo apt -y install php7.4
-      #          php --version
-      #          php8.0 composer install
-      #
-      #      - name: Run Static code Analysis
-      #        run: vendor/bin/phpstan analyse --error-format=github
-      #
+        run: composer install
+
       - name: Unit Tests
         run: vendor/phpunit/phpunit/phpunit
 
       # Runs the Super-Linter action
       - name: Run Super-Linter
-        #        uses: github/super-linter@v3
         uses: github/super-linter@v3
         env:
-          ACTIONS_RUNNER_DEBUG: true
+          ACTIONS_RUNNER_DEBUG: false
           VALIDATE_ALL_CODEBASE: false
           FILTER_REGEX_INCLUDE: .*src/.*
           #          FILTER_REGEX_EXCLUDE: .*(tests|vendor)/.*
