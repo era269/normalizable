@@ -31,13 +31,14 @@ jobs:
 
       - name: Install
         run: |
-          sudo apt-get update
-          sudo apt -y install software-properties-common
-          sudo add-apt-repository ppa:ondrej/php
-          sudo apt-get update
-          sudo apt -y install php7.4
-          php --version
           composer install
+      #          sudo apt-get update
+      #          sudo apt -y install software-properties-common
+      #          sudo add-apt-repository ppa:ondrej/php
+      #          sudo apt-get update
+      #          sudo apt -y install php7.4
+      #          php --version
+      #          php8.0 composer install
       #
       #      - name: Run Static code Analysis
       #        run: vendor/bin/phpstan analyse --error-format=github
