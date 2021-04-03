@@ -40,7 +40,7 @@ jobs:
         uses: github/super-linter@v3
         env:
           ACTIONS_RUNNER_DEBUG: false
-          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_ALL_CODEBASE: true
           FILTER_REGEX_INCLUDE: .*src/.*
           #          FILTER_REGEX_EXCLUDE: .*(tests|vendor)/.*
           DEFAULT_BRANCH: main
