@@ -29,7 +29,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install
+      - name: Install php8
         #        run: composer install
         run: |
           sudo apt-get update
@@ -39,7 +39,10 @@ jobs:
           sudo apt -y install php8.0
           sudo apt -y install php8.0-cli
           php --version
-          php composer install
+
+      - name: Composer
+        run: composer install
+
       - name: Unit Tests
         run: vendor/phpunit/phpunit/phpunit
 
