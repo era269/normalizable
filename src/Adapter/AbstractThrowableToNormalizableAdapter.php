@@ -13,7 +13,6 @@ abstract class AbstractThrowableToNormalizableAdapter extends AbstractNormalizab
         private Throwable $throwable
     )
     {
-
     }
 
     /**
