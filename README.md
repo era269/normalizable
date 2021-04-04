@@ -1,6 +1,6 @@
 # normalizable
 
-![PHP Stan Badge](https://img.shields.io/badge/PHPStan-level%206-brightgreen.svg?style=flat">)
+![PHP Stan Badge](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat">)
 ![Code Coverage Badge](./badge.svg)
 
 The main idea is that normalized object is presented as array(including nested) of any combination of scalar values:

@@ -38,7 +38,7 @@ jobs:
         run: vendor/bin/phpstan analyse
 
       - name: Unit Tests
-        run: vendor/phpunit/phpunit/phpunit
+        run: ./vendor/bin/phpunit --coverage-clover ./clover.xml
 
       - name: Update code coverage badge
         uses: timkrase/phpunit-coverage-badge@v1.2.0
