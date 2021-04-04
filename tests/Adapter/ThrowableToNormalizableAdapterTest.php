@@ -29,7 +29,7 @@ class ThrowableToNormalizableAdapterTest extends TestCase
             ['trace'],
         );
         $this->assertNormalized(
-            $this->throwable->getPrevious()->getPrevious(),
+            $this->throwable->getPrevious()?->getPrevious(),
             $normalized['previous']['previous'],
             ['file', 'line', 'code', 'message', 'trace'],
             ['previous'],
@@ -45,7 +45,7 @@ class ThrowableToNormalizableAdapterTest extends TestCase
     {
         self::assertInstanceOf(Throwable::class, $throwable);
         self::assertEquals(
-            get_class($throwable),
+            is_object($throwable) ? $throwable::class : '',
             $normalized['@type']
         );
         foreach ($hasKeys as $hasKey) {

@@ -9,7 +9,7 @@ use Era269\Normalizable\NormalizableInterface;
 trait AbstractNormalizableTrait
 {
     /**
-     * @return array<string, string|int|array|bool|float|null>
+     * @return array<string, mixed>
      */
     public function normalize(): array
     {

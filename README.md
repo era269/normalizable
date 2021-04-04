@@ -1,6 +1,7 @@
 # normalizable
 
-[![GitHub Super-Linter](https://github.com/era269/normalizable/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
+![PHP Stan Badge](https://img.shields.io/badge/PHPStan-level%206-brightgreen.svg?style=flat">)
+![Code Coverage Badge](./badge.svg)
 
 The main idea is that normalized object is presented as array(including nested) of any combination of scalar values:
 
@@ -35,7 +36,7 @@ based messages (HTTP, AMQP, ...)
 
 #### Domain exception extending
 
-```injectablephp
+```php
 <?php
 
 use Era269\Normalizable\Adapter\ThrowableToNormalizableAdapter;
@@ -65,7 +66,7 @@ final class ModelNotFoundException extends RuntimeException implements Normaliza
 
 #### Serializer integration
 
-```injectablephp
+```php
 <?php
 
 use Era269\Normalizable\Adapter\ThrowableToNormalizableAdapter;
@@ -89,7 +90,7 @@ final class ExceptionNormalizer implements NormalizerInterface
 
 ### Domain model normalization
 
-```injectablephp
+```php
 <?php
 
 use Era269\Normalizable\DenormalizableInterface;use Era269\Normalizable\Normalizable\DateTimeRfc3339Normalizable;use Era269\Normalizable\NormalizableInterface;
