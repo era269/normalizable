@@ -9,7 +9,7 @@ interface NormalizableInterface
     public const DEFAULT_FIELD_NAME_TYPE = '@type';
 
     /**
-     * @return array<string, mixed> Only scalar types in values
+     * @return array<string, mixed>
      */
     public function normalize(): array;
 
