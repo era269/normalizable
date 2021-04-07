@@ -37,6 +37,17 @@ class AbstractNormalizableTraitTest extends TestCase
         );
     }
 
+    public function testGetType(): void
+    {
+        /** @var NormalizableInterface&MockObject $normalizable */
+        $normalizable = self::getMockForTrait(AbstractNormalizableTrait::class, [], self::NORMALIZABLE_TRAIT_MOCK_CLASS_NAME);
+
+        self::assertEquals(
+            self::NORMALIZABLE_TRAIT_MOCK_CLASS_NAME,
+            $normalizable->getType()
+        );
+    }
+
     /**
      * @dataProvider normalizeWithCustomTypeFieldNameDataProvider
      * @param array<string, mixed> $normalized

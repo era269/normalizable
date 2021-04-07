@@ -1,7 +1,6 @@
 # normalizable
 
 ![PHP Stan Badge](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat">)
-![Code Coverage Badge](./badge.svg)
 
 The main idea is that normalized object is presented as array(including nested) of any combination of scalar values:
 
@@ -60,6 +59,11 @@ final class ModelNotFoundException extends RuntimeException implements Normaliza
              'modelId' => $this->modelId,
         ];
     }
+    
+    public function getType(): string
+    {
+        return self::class;
+    }
 }
 
 ```
@@ -116,7 +120,7 @@ final class DomainEvent implements NormalizableInterface, DenormalizableInterfac
             'created' => $this->createdAt->normalize(),
         ];
     }
-    public static function denormalize(array $data) : self //php8 => static
+    public static function denormalize(array $data) : static
     {
         $self = new self($data['name']);
         $self->createdAt = DateTimeRfc3339Normalizable::denormalize($data);
