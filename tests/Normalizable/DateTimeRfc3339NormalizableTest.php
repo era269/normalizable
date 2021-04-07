@@ -5,6 +5,7 @@ namespace Era269\Normalizable\Tests\Normalizable;
 
 use Era269\Normalizable\Normalizable\DateTimeRfc3339Normalizable;
 use PHPUnit\Framework\TestCase;
+use UnexpectedValueException;
 
 class DateTimeRfc3339NormalizableTest extends TestCase
 {
@@ -31,6 +32,14 @@ class DateTimeRfc3339NormalizableTest extends TestCase
         self::assertEquals(
             $dateTime->normalize(),
             DateTimeRfc3339Normalizable::denormalize($dateTime->normalize())->normalize()
+        );
+    }
+
+    public function testDenormalizeFail(): void
+    {
+        $this->expectException(UnexpectedValueException::class);
+        DateTimeRfc3339Normalizable::denormalize(
+            []
         );
     }
 }
