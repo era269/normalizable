@@ -43,7 +43,8 @@ use Era269\Normalizable\NormalizableInterface;
 
 final class ModelNotFoundException extends RuntimeException implements NormalizableInterface
 {
-    private $modelId;private $modelClassName;
+    private $modelId;
+    private $modelClassName;
     
     public function __construct($modelId, $modelClassName, Throwable $previous)
     {
