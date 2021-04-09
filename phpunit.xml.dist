@@ -4,13 +4,13 @@
     <include>
       <directory suffix=".php">./src</directory>
     </include>
+    <report>
+      <clover outputFile="clover.xml"/>
+    </report>
   </coverage>
   <testsuites>
     <testsuite name="normalizable test suite">
       <directory>./tests</directory>
     </testsuite>
   </testsuites>
-  <logging>
-    <log type="coverage-clover" target="clover.xml"/>
-  </logging>
 </phpunit>
