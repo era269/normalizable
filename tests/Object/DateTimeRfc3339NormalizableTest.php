@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Era269\Normalizable\Tests\Normalizable;
+namespace Era269\Normalizable\Tests\Object;
 
-use Era269\Normalizable\Normalizable\DateTimeRfc3339Normalizable;
+use Era269\Normalizable\Object\DateTimeRfc3339Normalizable;
 use PHPUnit\Framework\TestCase;
 use UnexpectedValueException;
 

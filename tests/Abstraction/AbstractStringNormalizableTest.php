@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Era269\Normalizable\Tests\Normalizable;
+namespace Era269\Normalizable\Tests\Abstraction;
 
-use Era269\Normalizable\Normalizable\AbstractStringNormalizable;
+use Era269\Normalizable\Abstraction\AbstractStringNormalizable;
 use Era269\Normalizable\StringNormalizableInterface;
 use PHPUnit\Framework\TestCase;
 
