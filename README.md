@@ -39,8 +39,7 @@ based messages (HTTP, AMQP, ...)
 ```php
 <?php
 
-use Era269\Normalizable\Adapter\ThrowableToNormalizableAdapter;
-use Era269\Normalizable\NormalizableInterface;
+use Era269\Normalizable\Adapter\ThrowableToNormalizableAdapter;use Era269\Normalizable\NormalizableInterface;
 
 final class ModelNotFoundException extends RuntimeException implements NormalizableInterface
 {
@@ -99,8 +98,7 @@ final class ExceptionNormalizer implements NormalizerInterface
 ```php
 <?php
 
-use Era269\Normalizable\DenormalizableInterface;use Era269\Normalizable\Normalizable\DateTimeRfc3339Normalizable;use Era269\Normalizable\NormalizableInterface;
-use Era269\Normalizable\Traits\AbstractNormalizableTrait;
+use Era269\Normalizable\DenormalizableInterface;use Era269\Normalizable\NormalizableInterface;use Era269\Normalizable\Object\DateTimeRfc3339Normalizable;use Era269\Normalizable\Traits\AbstractNormalizableTrait;
 
 final class DomainEvent implements NormalizableInterface, DenormalizableInterface
 {
@@ -143,7 +141,7 @@ output:
   "@type": "DomainEvent",
   "name": "first",
   "createdAt": {
-    "@type": "\\Era269\\Normalizable\\Normalizable\\DateTimeRfc3339Normalizable",
+    "@type": "\\Era269\\Normalizable\\Object\\DateTimeRfc3339Normalizable",
     "dateTime": "2021-02-06T20:07:55.621766+0000"
   }
 }

@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Era269\Normalizable\Adapter;
+namespace Era269\Normalizable\Abstraction;
 
-use Era269\Normalizable\AbstractNormalizableObject;
 use Throwable;
 
-abstract class AbstractThrowableToNormalizableAdapter extends AbstractNormalizableObject
+abstract class AbstractThrowableToNormalizableAdapter extends AbstractNormalizable
 {
     final public function __construct(
         private Throwable $throwable

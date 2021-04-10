@@ -10,7 +10,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Era269\Normalizable\AbstractNormalizableObject
+ * @covers \Era269\Normalizable\Abstraction\AbstractNormalizable
  */
 class AbstractNormalizableTraitTest extends TestCase
 {

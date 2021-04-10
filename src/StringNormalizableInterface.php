@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Era269\Normalizable;
 
-use Stringable;
-
-interface StringNormalizableInterface extends NormalizableInterface, Stringable
+interface StringNormalizableInterface extends NormalizableInterface, StringInterface
 {
-    public function equals(self $to): bool;
+
 }

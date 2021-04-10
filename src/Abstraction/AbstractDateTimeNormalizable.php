@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Era269\Normalizable\Normalizable;
+namespace Era269\Normalizable\Abstraction;
 
 use DateTime;
 use DateTimeInterface;
