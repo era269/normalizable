@@ -17,7 +17,7 @@ abstract class AbstractStringNormalizable extends AbstractNormalizable implement
     protected function getNormalized(): array
     {
         return [
-            $this->getValueFieldName() => (string)$this->getObjectForNormalization()
+            $this->getValueFieldName() => (string) $this->getObjectForNormalization(),
         ];
     }
 

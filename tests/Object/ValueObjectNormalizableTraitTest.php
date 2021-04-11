@@ -87,7 +87,6 @@ class ValueObjectNormalizableTraitTest extends TestCase
         $this->expectException(LogicException::class);
         $this->createNormalizableWithWrongParameterType()
             ->normalize();
-
     }
 
     protected function createNormalizableWithWrongParameterType(): NormalizableInterface

@@ -12,7 +12,6 @@ abstract class AbstractThrowableToNormalizableAdapter extends AbstractNormalizab
         private Throwable $throwable
     )
     {
-
     }
 
     /**
@@ -22,9 +21,10 @@ abstract class AbstractThrowableToNormalizableAdapter extends AbstractNormalizab
     {
         $throwable = $this->throwable;
         $previous = $throwable->getPrevious();
-        $previousOrTrace = ($previous instanceof Throwable)
+        $previousOrTrace = $previous instanceof Throwable
             ? ['previous' => (new static($previous))->normalize()]
             : ['trace' => $this->getTrace($throwable)];
+
         return [
                 'message' => $throwable->getMessage(),
                 'code' => $throwable->getCode(),
@@ -33,13 +33,13 @@ abstract class AbstractThrowableToNormalizableAdapter extends AbstractNormalizab
             ] + $previousOrTrace;
     }
 
-    final protected function getObjectForNormalization(): Throwable
-    {
-        return $this->throwable;
-    }
-
     /**
      * @return array<string, mixed>
      */
     abstract protected function getTrace(Throwable $throwable): array;
+
+    final protected function getObjectForNormalization(): Throwable
+    {
+        return $this->throwable;
+    }
 }

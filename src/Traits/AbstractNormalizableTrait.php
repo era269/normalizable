@@ -17,14 +17,14 @@ trait AbstractNormalizableTrait
             + $this->getNormalized();
     }
 
-    public function getType(): string
-    {
-        return $this->getObjectForNormalization()::class;
-    }
-
     protected function getTypeFieldName(): string
     {
         return NormalizableInterface::DEFAULT_FIELD_NAME_TYPE;
+    }
+
+    public function getType(): string
+    {
+        return $this->getObjectForNormalization()::class;
     }
 
     protected function getObjectForNormalization(): object

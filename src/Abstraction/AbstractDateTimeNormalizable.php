@@ -47,7 +47,7 @@ abstract class AbstractDateTimeNormalizable extends DateTime implements Normaliz
         return [
             $this->getDateTimeFieldName() => $this->getObjectForNormalization()->format(
                 $this->getDateTimeFormat()
-            )
+            ),
         ];
     }
 
