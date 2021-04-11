@@ -15,11 +15,9 @@ use PHPUnit\Framework\TestCase;
 class AbstractNormalizableTraitTest extends TestCase
 {
     private const NORMALIZED = [
-        'normalizedDataKey' => 'normalizedDataValue'
+        'normalizedDataKey' => 'normalizedDataValue',
     ];
-
     private const NORMALIZABLE_TRAIT_MOCK_CLASS_NAME = 'UnitTestAbstractNormalizableTraitMock';
-
     private const TYPE_FIELD_NAME_DEFAULT = '@type';
     private const TYPE_FIELD_NAME_CUSTOM  = '#type-field-name';
 
@@ -50,6 +48,7 @@ class AbstractNormalizableTraitTest extends TestCase
 
     /**
      * @dataProvider normalizeWithCustomTypeFieldNameDataProvider
+     *
      * @param array<string, mixed> $normalized
      */
     public function testNormalizeWithCustomTypeFieldName(string $typeFieldName, array $normalized, ?object $normalizableObject = null): void
@@ -59,23 +58,6 @@ class AbstractNormalizableTraitTest extends TestCase
             $normalizable->normalize(),
             [$typeFieldName => get_class($normalizableObject ?? $normalizable)] + $normalized
         );
-    }
-
-    /**
-     * @return array<int, array<int, array<string, string>|DateTime|string|null>>
-     */
-    public function normalizeWithCustomTypeFieldNameDataProvider(): array
-    {
-        return [
-            [self::TYPE_FIELD_NAME_DEFAULT, self::NORMALIZED, new DateTime()],
-            [self::TYPE_FIELD_NAME_DEFAULT, self::NORMALIZED, null],
-            [self::TYPE_FIELD_NAME_DEFAULT, [], new DateTime()],
-            [self::TYPE_FIELD_NAME_DEFAULT, [], null],
-            [self::TYPE_FIELD_NAME_CUSTOM, self::NORMALIZED, new DateTime()],
-            [self::TYPE_FIELD_NAME_CUSTOM, self::NORMALIZED, null],
-            [self::TYPE_FIELD_NAME_CUSTOM, [], new DateTime()],
-            [self::TYPE_FIELD_NAME_CUSTOM, [], null],
-        ];
     }
 
     /**
@@ -122,5 +104,22 @@ class AbstractNormalizableTraitTest extends TestCase
                     ?? $this;
             }
         };
+    }
+
+    /**
+     * @return array<int, array<int, array<string, string>|DateTime|string|null>>
+     */
+    public function normalizeWithCustomTypeFieldNameDataProvider(): array
+    {
+        return [
+            [self::TYPE_FIELD_NAME_DEFAULT, self::NORMALIZED, new DateTime()],
+            [self::TYPE_FIELD_NAME_DEFAULT, self::NORMALIZED, null],
+            [self::TYPE_FIELD_NAME_DEFAULT, [], new DateTime()],
+            [self::TYPE_FIELD_NAME_DEFAULT, [], null],
+            [self::TYPE_FIELD_NAME_CUSTOM, self::NORMALIZED, new DateTime()],
+            [self::TYPE_FIELD_NAME_CUSTOM, self::NORMALIZED, null],
+            [self::TYPE_FIELD_NAME_CUSTOM, [], new DateTime()],
+            [self::TYPE_FIELD_NAME_CUSTOM, [], null],
+        ];
     }
 }

@@ -6,5 +6,4 @@ namespace Era269\Normalizable;
 
 interface StringNormalizableInterface extends NormalizableInterface, StringInterface
 {
-
 }

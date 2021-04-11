@@ -24,5 +24,4 @@ class IntegerObjectTest extends TestCase
     {
         return new IntegerObject($value);
     }
-
 }

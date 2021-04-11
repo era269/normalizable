@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Era269\Normalizable\Traits;
 
-
 use Era269\Normalizable\ComparableInterface;
 
 trait StringObjectTrait
@@ -24,7 +23,7 @@ trait StringObjectTrait
 
     public function toScalar(): string
     {
-        return (string)$this;
+        return (string) $this;
     }
 
     public function __toString(): string

@@ -13,14 +13,13 @@ class AbstractStringNormalizableTest extends TestCase
     private const VALUE            = 'value';
     private const VALUE_FIELD_NAME = 'value_field_name';
     private const MOCK_CLASS_NAME  = 'StringNormalizableMockClassName';
-
     private StringNormalizableInterface $stringNormalizable;
 
     public function testToString(): void
     {
         self::assertEquals(
             self::VALUE,
-            (string)$this->stringNormalizable
+            (string) $this->stringNormalizable
         );
     }
 
@@ -29,15 +28,6 @@ class AbstractStringNormalizableTest extends TestCase
         self::assertTrue(
             $this->stringNormalizable->equals(
                 $this->getMockForAbstractStringNormalizable(self::VALUE)
-            )
-        );
-    }
-
-    public function testNotEquals(): void
-    {
-        self::assertFalse(
-            $this->stringNormalizable->equals(
-                $this->getMockForAbstractStringNormalizable('not_equal_value')
             )
         );
     }
@@ -52,7 +42,17 @@ class AbstractStringNormalizableTest extends TestCase
         $mock
             ->method('getValueFieldName')
             ->willReturn(self::VALUE_FIELD_NAME);
+
         return $mock;
+    }
+
+    public function testNotEquals(): void
+    {
+        self::assertFalse(
+            $this->stringNormalizable->equals(
+                $this->getMockForAbstractStringNormalizable('not_equal_value')
+            )
+        );
     }
 
     protected function setUp(): void

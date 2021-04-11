@@ -21,11 +21,13 @@ trait ValueObjectNormalizableTrait
         foreach (get_object_vars($this) as $key => $value) {
             $normalized[$key] = $this->extractScalar($value);
         }
+
         return $normalized;
     }
 
     /**
      * @param null|int|float|string|bool|array<mixed, mixed>|object $value
+     *
      * @return null|int|float|string|bool|array<mixed, mixed>
      */
     private function extractScalar(null|int|float|string|bool|array|object $value): null|int|float|string|bool|array
