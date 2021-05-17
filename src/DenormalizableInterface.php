@@ -7,7 +7,9 @@ namespace Era269\Normalizable;
 interface DenormalizableInterface extends NormalizableInterface
 {
     /**
-     * @param array<string, mixed> $data Only scalar types in values
+     * @param array<string, mixed> $data
+     *
+     * @return static
      */
-    public static function denormalize(array $data): static;
+    public static function denormalize(array $data);
 }

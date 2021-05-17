@@ -8,10 +8,16 @@ use Throwable;
 
 abstract class AbstractThrowableToNormalizableAdapter extends AbstractNormalizable
 {
+    /**
+     * @var Throwable
+     */
+    private $throwable;
+
     final public function __construct(
-        private Throwable $throwable
+        Throwable $throwable
     )
     {
+        $this->throwable = $throwable;
     }
 
     /**

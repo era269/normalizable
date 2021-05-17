@@ -25,7 +25,7 @@ abstract class AbstractDateTimeNormalizable extends DateTime implements Normaliz
     /**
      * @inheritDoc
      */
-    public static function denormalize(array $data): static
+    public static function denormalize(array $data)
     {
         try {
             return new static(
