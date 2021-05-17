@@ -10,8 +10,14 @@ use Throwable;
 
 class ThrowableToNormalizableAdapterTest extends TestCase
 {
-    private Exception $throwable;
-    private ThrowableToNormalizableAdapter $adapter;
+    /**
+     * @var Exception
+     */
+    private $throwable;
+    /**
+     * @var ThrowableToNormalizableAdapter
+     */
+    private $adapter;
 
     public function testNormalize(): void
     {
@@ -20,19 +26,19 @@ class ThrowableToNormalizableAdapterTest extends TestCase
             $this->throwable,
             $normalized,
             ['file', 'line', 'code', 'message', 'previous'],
-            ['trace'],
+            ['trace']
         );
         $this->assertNormalized(
             $this->throwable->getPrevious(),
             $normalized['previous'],
             ['file', 'line', 'code', 'message', 'previous'],
-            ['trace'],
+            ['trace']
         );
         $this->assertNormalized(
-            $this->throwable->getPrevious()?->getPrevious(),
+            !is_null($this->throwable->getPrevious()) ? $this->throwable->getPrevious()->getPrevious() : null,
             $normalized['previous']['previous'],
             ['file', 'line', 'code', 'message', 'trace'],
-            ['previous'],
+            ['previous']
         );
     }
 
@@ -45,7 +51,7 @@ class ThrowableToNormalizableAdapterTest extends TestCase
     {
         self::assertInstanceOf(Throwable::class, $throwable);
         self::assertEquals(
-            is_object($throwable) ? $throwable::class : '',
+            is_object($throwable) ? get_class($throwable) : '',
             $normalized['@type']
         );
         foreach ($hasKeys as $hasKey) {
