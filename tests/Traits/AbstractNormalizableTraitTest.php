@@ -49,9 +49,10 @@ class AbstractNormalizableTraitTest extends TestCase
     /**
      * @dataProvider normalizeWithCustomTypeFieldNameDataProvider
      *
+     * @param object|null $normalizableObject
      * @param array<string, mixed> $normalized
      */
-    public function testNormalizeWithCustomTypeFieldName(string $typeFieldName, array $normalized, ?object $normalizableObject = null): void
+    public function testNormalizeWithCustomTypeFieldName(string $typeFieldName, array $normalized, $normalizableObject = null): void
     {
         $normalizable = $this->createNormalizable($typeFieldName, $normalized, $normalizableObject);
         self::assertEquals(
@@ -62,23 +63,31 @@ class AbstractNormalizableTraitTest extends TestCase
 
     /**
      * @param array<string, mixed> $normalized
+     * @param object|null $normalizableObject
      */
-    private function createNormalizable(string $typeFieldName, array $normalized, ?object $normalizableObject = null): NormalizableInterface
+    private function createNormalizable(string $typeFieldName, array $normalized, $normalizableObject = null): NormalizableInterface
     {
         return new class($typeFieldName, $normalized, $normalizableObject) implements NormalizableInterface {
             use AbstractNormalizableTrait;
 
-            private string $typeFieldName;
+            /**
+             * @var string
+             */
+            private $typeFieldName;
             /**
              * @var array<string, mixed> $normalized
              */
-            private array $normalized;
-            private ?object $normalizableObject;
+            private $normalized;
+            /**
+             * @var object|null
+             */
+            private $normalizableObject;
 
             /**
              * @param array<string, mixed> $normalized
+             * @param object|null $normalizableObject
              */
-            public function __construct(string $typeFieldName, array $normalized, ?object $normalizableObject = null)
+            public function __construct(string $typeFieldName, array $normalized, $normalizableObject = null)
             {
                 $this->typeFieldName = $typeFieldName;
                 $this->normalized = $normalized;
@@ -98,7 +107,10 @@ class AbstractNormalizableTraitTest extends TestCase
                 return $this->normalized;
             }
 
-            protected function getObjectForNormalization(): object
+            /**
+             * @return object
+             */
+            protected function getObjectForNormalization()
             {
                 return $this->normalizableObject
                     ?? $this;
