@@ -13,7 +13,10 @@ class AbstractStringNormalizableTest extends TestCase
     private const VALUE            = 'value';
     private const VALUE_FIELD_NAME = 'value_field_name';
     private const MOCK_CLASS_NAME  = 'StringNormalizableMockClassName';
-    private StringNormalizableInterface $stringNormalizable;
+    /**
+     * @var StringNormalizableInterface
+     */
+    private $stringNormalizable;
 
     public function testToString(): void
     {
@@ -37,7 +40,7 @@ class AbstractStringNormalizableTest extends TestCase
         $mock = $this->getMockForAbstractClass(
             AbstractStringNormalizable::class,
             [$value],
-            self::MOCK_CLASS_NAME,
+            self::MOCK_CLASS_NAME
         );
         $mock
             ->method('getValueFieldName')
