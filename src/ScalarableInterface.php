@@ -6,5 +6,8 @@ namespace Era269\Normalizable;
 
 interface ScalarableInterface
 {
-    public function toScalar(): int|float|string|bool;
+    /**
+     * @return int|float|string|bool
+     */
+    public function toScalar();
 }

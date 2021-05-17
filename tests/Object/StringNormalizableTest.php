@@ -21,7 +21,7 @@ class StringNormalizableTest extends TestCase
         );
         self::assertEquals(
             self::VALUE,
-            $normalized[self::FIELD_NAME_VALUE],
+            $normalized[self::FIELD_NAME_VALUE]
         );
     }
 }

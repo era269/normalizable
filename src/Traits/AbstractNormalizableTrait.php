@@ -24,10 +24,15 @@ trait AbstractNormalizableTrait
 
     public function getType(): string
     {
-        return $this->getObjectForNormalization()::class;
+        return get_class(
+            $this->getObjectForNormalization()
+        );
     }
 
-    protected function getObjectForNormalization(): object
+    /**
+     * @return object
+     */
+    protected function getObjectForNormalization()
     {
         return $this;
     }

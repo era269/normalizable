@@ -8,10 +8,16 @@ use Era269\Normalizable\ComparableInterface;
 
 trait IntegerObjectTrait
 {
+    /**
+     * @var int
+     */
+    private $value;
+
     public function __construct(
-        private int $value,
+        int $value
     )
     {
+        $this->value = $value;
     }
 
     public function equals(ComparableInterface $to): bool
@@ -31,7 +37,10 @@ trait IntegerObjectTrait
         return $this->value;
     }
 
-    public function equalsTo(float|bool|int|string $scalar): bool
+    /**
+     * @inheritDoc
+     */
+    public function equalsTo($scalar): bool
     {
         return $scalar === $this->toInteger();
     }
