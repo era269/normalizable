@@ -33,6 +33,15 @@ class ListNormalizableToNormalizableAdapterTest extends TestCase
         );
     }
 
+    public function testGetType(): void
+    {
+        $adapter = new ListNormalizableToNormalizableAdapter();
+        self::assertEquals(
+            'array',
+            $adapter->getType()
+        );
+    }
+
     /**
      * @return array<int, array[]>
      */
