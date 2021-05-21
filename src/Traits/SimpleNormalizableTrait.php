@@ -13,6 +13,14 @@ trait SimpleNormalizableTrait
     use AbstractNormalizableTrait;
 
     /**
+     * @return array<string, mixed>
+     */
+    protected function getNormalized(): array
+    {
+        return $this->getAutoNormalized();
+    }
+
+    /**
      * @param array<string, mixed> $normalized
      *
      * @return array<string, mixed>
