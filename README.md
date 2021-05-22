@@ -29,6 +29,67 @@ based messages (HTTP, AMQP, ...)
 
 ## Examples
 
+### Simple Normalization
+
+If all object properties are scalar `or` ScalarableInterface `or` NormalizableInterface then:
+**SimpleNormalizableTrait** will do everything automatically
+
+```php
+<?php
+
+use Era269\Normalizable\NormalizableInterface;
+use Era269\Normalizable\Object\DateTimeImmutableRfc3339Normalizable;
+use Era269\Normalizable\Traits\SimpleNormalizableTrait;
+
+final class DomainEvent implements NormalizableInterface
+{
+    use SimpleNormalizableTrait;
+
+    /**
+     * @var string
+     */
+    private $name;
+    /**
+     * @var DateTimeImmutableRfc3339Normalizable
+     */
+    private $occurredAt;
+
+    public function __construct(string $name)
+    {
+        $this->occurredAt = (new DateTimeImmutableRfc3339Normalizable());
+        $this->name = $name;
+    }
+    
+    public function getName(): string
+    {
+        return $this->name;
+    }
+    
+    public function getOccurredAt(): DateTimeInterface
+    {
+        return $this->occurredAt;
+    }
+}
+
+$event = new DomainEvent('first');
+
+echo json_encode($event->normalize());
+
+```
+
+output:
+
+```json
+{
+  "@type": "DomainEvent",
+  "name": "first",
+  "occurredAt": {
+    "@type": "\\Era269\\Normalizable\\Object\\DateTimeImmutableRfc3339Normalizable",
+    "dateTime": "2021-02-06T20:07:55.621766+0000"
+  }
+}
+```
+
 ### Exception normalization
 
 * Adapter is valuable only in the case when it is not supposed to denormalize the normalized data. The best example
@@ -117,7 +178,7 @@ final class DomainEvent implements NormalizableInterface, DenormalizableInterfac
     {
         return [
             'name' => $this->name,
-            'created' => $this->createdAt->normalize(),
+            'createdAt' => $this->createdAt->normalize(),
         ];
     }
     public static function denormalize(array $data) : static
