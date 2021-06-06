@@ -31,7 +31,8 @@ based messages (HTTP, AMQP, ...)
 
 ### Simple Normalization
 
-If all object properties are scalar `or` ScalarableInterface `or` NormalizableInterface then:
+If all object properties are scalar `or` ScalarableInterface `or` NormalizableInterface `or` Stringable (
+has `__toString`) then:
 **SimpleNormalizableTrait** will do everything automatically
 
 ```php
@@ -139,7 +140,7 @@ use Era269\Normalizable\Adapter\ThrowableToNormalizableAdapter;
 
 final class ExceptionNormalizer implements NormalizerInterface
 {    
-    public function normalize(object $object) : array
+    public function normalize($object) : array
     {
         /** @var Throwable $object */
         return (new ThrowableToNormalizableAdapter($object))->normalize();
@@ -165,8 +166,9 @@ final class DomainEvent implements NormalizableInterface, DenormalizableInterfac
 {
     use AbstractNormalizableTrait;
 
-    private string $name;
-    private DateTimeRfc3339Normalizable $createdAt;
+    private $name;
+
+    private $createdAt;
 
     public function __construct(string $name)
     {
@@ -181,7 +183,7 @@ final class DomainEvent implements NormalizableInterface, DenormalizableInterfac
             'createdAt' => $this->createdAt->normalize(),
         ];
     }
-    public static function denormalize(array $data) : static
+    public static function denormalize(array $data) : static //since php 8.0
     {
         $self = new self($data['name']);
         $self->createdAt = DateTimeRfc3339Normalizable::denormalize($data);

@@ -63,6 +63,9 @@ trait SimpleNormalizableTrait
             case $value instanceof ScalarableInterface:
                 return $value->toScalar();
 
+            case $this->isStringable($value):
+                return (string) $value;
+
             default:
                 throw new LogicException(sprintf(
                     'Value "%s", but MUST be scalar or implement any of [%s, %s]',
@@ -71,5 +74,13 @@ trait SimpleNormalizableTrait
                     ScalarableInterface::class
                 ));
         }
+    }
+
+    /**
+     * @param object $value
+     */
+    private function isStringable($value): bool
+    {
+        return method_exists($value, '__toString');
     }
 }
