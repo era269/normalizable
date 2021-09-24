@@ -37,7 +37,7 @@ jobs:
         run: composer update --prefer-dist --no-progress --no-dev
 
       - name: phpStan
-        run: phpstan analyse
+        run: vendor/bin/phpstan analyse -c phpstan.neon
 
       - name: phpUnit
         run: phpunit --coverage-clover clover.xml --bootstrap="./tests/bootstrap.php" --whitelist src tests
