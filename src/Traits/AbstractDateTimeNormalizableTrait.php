@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Era269\Normalizable\Traits;
 
+use BadMethodCallException;
 use DateTimeInterface;
 use DateTimeZone;
 use Exception;
@@ -53,4 +54,22 @@ trait AbstractDateTimeNormalizableTrait
     }
 
     abstract protected function getDateTimeFormat(): string;
+
+    final protected static function throwInvalidMethodCallException(int $phpVersion, string $methodName): void
+    {
+        throw new BadMethodCallException(sprintf(
+            'Method "%s" is available starting with %s PHP version',
+            $phpVersion,
+            $methodName
+        ));
+    }
+
+    /**
+     * @inheritDoc
+     * @return static|false
+     */
+    public static function createFromFormat($format, $datetime, $timezone = null)
+    {
+        return parent::createFromFormat($format, $datetime, $timezone);
+    }
 }
