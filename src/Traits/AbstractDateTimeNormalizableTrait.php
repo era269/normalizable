@@ -68,7 +68,7 @@ trait AbstractDateTimeNormalizableTrait
      * @inheritDoc
      * @return static|false
      */
-    public static function createFromFormat($format, $datetime, DateTimeZone $timezone = null)
+    public static function createFromFormat($format, $datetime, $timezone = null)
     {
         return parent::createFromFormat($format, $datetime, $timezone);
     }
