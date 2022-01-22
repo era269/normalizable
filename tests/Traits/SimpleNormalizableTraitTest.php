@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Era269\Normalizable\Tests\Object;
+namespace Era269\Normalizable\Tests\Traits;
 
 use DateTime;
 use DateTimeInterface;
@@ -248,6 +248,7 @@ class SimpleNormalizableTraitTest extends TestCase
 
             /**
              * @param array<int, mixed> $privateArray
+             * @param object $stringable
              */
             public function __construct(
                 int $publicInt,
