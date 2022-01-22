@@ -25,7 +25,7 @@ trait SimpleNormalizableTrait
      *
      * @return array<string, mixed>
      */
-    protected function getAutoNormalized(array $normalized = []): array
+    private function getAutoNormalized(array $normalized = []): array
     {
         foreach (get_object_vars($this) as $propertyName => $value) {
             $key = $this->getNormalizedPropertyName($propertyName);
