@@ -18,8 +18,8 @@ jobs:
         phpstan-versions: [ 'latest' ]
         include:
           - php-versions: '7.1'
-              phpunit-versions: '7.5.20'
-              phpstan-versions: '1.4.0'
+            phpunit-versions: '7.5.20'
+            phpstan-versions: '1.4.0'
           - php-versions: '7.2'
             phpunit-versions: '8.5.15'
             phpstan-versions: '1.4.0'
