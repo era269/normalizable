@@ -11,7 +11,7 @@ use UnexpectedValueException;
 
 trait AbstractDateTimeNormalizableTrait
 {
-    use AbstractNormalizableTrait;
+    use NormalizableTrait;
 
     final public function __construct(string $datetime = 'now', DateTimeZone $timezone = null)
     {
@@ -38,7 +38,7 @@ trait AbstractDateTimeNormalizableTrait
     /**
      * @return array<string, string>
      */
-    public function getNormalized(): array
+    private function getObjectVars(): array
     {
         return [
             $this->getDateTimeFieldName() => $this->getObjectForNormalization()->format(

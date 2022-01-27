@@ -6,13 +6,14 @@ namespace Era269\Normalizable\Tests\Adapter;
 
 use Era269\Normalizable\Adapter\ListNormalizableToNormalizableAdapter;
 use Era269\Normalizable\NormalizableInterface;
+use Era269\Normalizable\Normalizer\Normalizer\DefaultNormalizationFacade;
+use Era269\Normalizable\Object\Normalizable;
 use PHPUnit\Framework\TestCase;
 
 class ListNormalizableToNormalizableAdapterTest extends TestCase
 {
     private const NORMALIZED_OBJECT = [
-        '@type' => 'object/class',
-        'content' => [],
+        '@type' => 'Normalizable',
     ];
 
     /**
@@ -27,18 +28,9 @@ class ListNormalizableToNormalizableAdapterTest extends TestCase
         foreach ($objects as $object) {
             $expected[] = self::NORMALIZED_OBJECT;
         }
-        self::assertSame(
-            $expected,
-            $adapter->normalize()
-        );
-    }
-
-    public function testGetType(): void
-    {
-        $adapter = new ListNormalizableToNormalizableAdapter();
         self::assertEquals(
-            'array',
-            $adapter->getType()
+            $expected,
+            (new DefaultNormalizationFacade())->normalize($adapter)
         );
     }
 
@@ -47,10 +39,7 @@ class ListNormalizableToNormalizableAdapterTest extends TestCase
      */
     public function dataProvider(): array
     {
-        $object = $this->createMock(NormalizableInterface::class);
-        $object
-            ->method('normalize')
-            ->willReturn(self::NORMALIZED_OBJECT);
+        $object = new Normalizable();
 
         return [
             [[$object]],

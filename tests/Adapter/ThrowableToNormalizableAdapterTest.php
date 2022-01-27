@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Era269\Normalizable\Tests\Adapter;
 
 use Era269\Normalizable\Adapter\ThrowableToNormalizableAdapter;
+use Era269\Normalizable\Normalizer\Normalizer\DefaultNormalizationFacade;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Throwable;
@@ -17,11 +18,11 @@ class ThrowableToNormalizableAdapterTest extends TestCase
     /**
      * @var ThrowableToNormalizableAdapter
      */
-    private $adapter;
+    private $adaptedThrowable;
 
     public function testNormalize(): void
     {
-        $normalized = $this->adapter->normalize();
+        $normalized = (new DefaultNormalizationFacade())->normalize($this->adaptedThrowable);
         $this->assertNormalized(
             $this->throwable,
             $normalized,
@@ -77,6 +78,6 @@ class ThrowableToNormalizableAdapterTest extends TestCase
                 )
             )
         );
-        $this->adapter = new ThrowableToNormalizableAdapter($this->throwable);
+        $this->adaptedThrowable = new ThrowableToNormalizableAdapter($this->throwable);
     }
 }
