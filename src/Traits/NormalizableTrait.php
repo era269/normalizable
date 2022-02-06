@@ -19,7 +19,7 @@ trait NormalizableTrait
     private $keyDecorator;
 
     /**
-     * @return array<int|string, int|string|bool|array|null>
+     * @return array<int|string, int|string|bool|array<int|string, mixed>|null>
      */
     public function normalize(): array
     {
