@@ -27,6 +27,9 @@ class ThrowableToNormalizableAdapter implements NormalizableWrapperInterface, No
         $this->throwable = $throwable;
     }
 
+    /**
+     * @return array<int|string, mixed>
+     */
     private function getObjectVars(): array
     {
         $throwable = $this->throwable;
@@ -49,6 +52,9 @@ class ThrowableToNormalizableAdapter implements NormalizableWrapperInterface, No
             ] + $previousOrTrace;
     }
 
+    /**
+     * @return array<int|string, mixed>
+     */
     protected function getTrace(Throwable $throwable): array
     {
         return $throwable->getTrace();

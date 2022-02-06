@@ -7,7 +7,7 @@ namespace Era269\Normalizable;
 interface NormalizableInterface
 {
     /**
-     * @return array<string, mixed>
+     * @return array<int|string, int|string|bool|array|null>
      */
     public function normalize(): array;
 }

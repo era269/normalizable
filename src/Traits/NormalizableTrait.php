@@ -19,10 +19,7 @@ trait NormalizableTrait
     private $keyDecorator;
 
     /**
-     * @param NormalizerInterface $normalizer
-     * @param KeyDecoratorInterface $keyDecorator
-     *
-     * @return array<string, mixed>
+     * @inheritDoc
      */
     public function normalize(): array
     {
@@ -30,9 +27,9 @@ trait NormalizableTrait
     }
 
     /**
-     * @param array<string, mixed> $objectVars
+     * @param array<int|string, mixed> $objectVars
      *
-     * @return array<string, mixed>
+     * @return array<int|string, mixed>
      */
     private function getAutoNormalized(array $objectVars = []): array
     {
@@ -57,7 +54,7 @@ trait NormalizableTrait
     }
 
     /**
-     * @return array
+     * @return array<int|string, mixed>
      */
     private function getObjectVars(): array
     {

@@ -39,7 +39,7 @@ final class ShortClassNameTypeNormalizableNormalizerDecorator implements Normali
     public function normalize($value)
     {
         $normalized = $this->decoratedNormalizer->normalize($value);
-        if ($value instanceof NormalizableInterface) {
+        if ($value instanceof NormalizableInterface && is_array($normalized)) {
             $normalized[self::FIELD_NAME_TYPE] = $this->getShortClasName($value);
         }
 

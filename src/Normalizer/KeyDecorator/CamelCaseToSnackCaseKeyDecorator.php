@@ -11,6 +11,10 @@ final class CamelCaseToSnackCaseKeyDecorator extends StringObject implements Key
 {
     public function decorate($value)
     {
-        // TODO: Implement decorate() method.
+        return strtolower((string) preg_replace(
+            '/(?<!^)[A-Z]/',
+            '_$0',
+            (string) $value
+        ));
     }
 }

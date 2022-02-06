@@ -15,6 +15,7 @@ final class NotObjectNormalizer implements NormalizerInterface
 
     public function normalize($value)
     {
+        /** @var array<int|string, mixed>|bool|float|int|string|null $value */
         return $value;
     }
 }

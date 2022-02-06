@@ -10,11 +10,16 @@ final class StringableNormalizer implements NormalizerInterface
 {
     public function supports($value): bool
     {
-        return method_exists($value, '__toString');
+        return is_object($value)
+            && method_exists($value, '__toString');
     }
 
+    /**
+     * @inheritDoc
+     */
     public function normalize($value)
     {
+        /** @var string $value */
         return (string) $value;
     }
 }
