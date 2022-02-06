@@ -10,16 +10,16 @@ use Era269\Normalizable\NormalizerInterface;
 trait NormalizableTrait
 {
     /**
-     * @var NormalizerInterface
+     * @var NormalizerInterface|null
      */
     private $normalizer;
     /**
-     * @var KeyDecoratorInterface
+     * @var KeyDecoratorInterface|null
      */
     private $keyDecorator;
 
     /**
-     * @inheritDoc
+     * @return array<int|string, int|string|bool|array|null>
      */
     public function normalize(): array
     {
