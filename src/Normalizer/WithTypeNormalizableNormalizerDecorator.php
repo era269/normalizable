@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Era269\Normalizable\Normalizer\Normalizer;
+namespace Era269\Normalizable\Normalizer;
 
+use Era269\Normalizable\KeyDecoratorAwareInterface;
+use Era269\Normalizable\KeyDecoratorInterface;
 use Era269\Normalizable\NormalizableInterface;
-use Era269\Normalizable\NormalizableWrapperInterface;
-use Era269\Normalizable\Normalizer\KeyDecoratorAwareInterface;
-use Era269\Normalizable\Normalizer\KeyDecoratorInterface;
-use Era269\Normalizable\Normalizer\NormalizerAwareInterface;
+use Era269\Normalizable\NormalizerAwareInterface;
 use Era269\Normalizable\NormalizerInterface;
+use Era269\Normalizable\Object\ShortClassName;
+use Era269\Normalizable\TypeAwareInterface;
 
-final class ShortClassNameTypeNormalizableNormalizerDecorator implements NormalizerInterface, NormalizerAwareInterface, KeyDecoratorAwareInterface
+final class WithTypeNormalizableNormalizerDecorator implements NormalizerInterface, NormalizerAwareInterface, KeyDecoratorAwareInterface
 {
     private const FIELD_NAME_TYPE = '@type';
     /**
@@ -40,23 +41,12 @@ final class ShortClassNameTypeNormalizableNormalizerDecorator implements Normali
     {
         $normalized = $this->decoratedNormalizer->normalize($value);
         if ($value instanceof NormalizableInterface && is_array($normalized)) {
-            $normalized[self::FIELD_NAME_TYPE] = $this->getShortClasName($value);
+            $normalized[self::FIELD_NAME_TYPE] = $value instanceof TypeAwareInterface
+                ? $value->getType()
+                : (string) new ShortClassName($value);
         }
 
         return $normalized;
-    }
-
-    private function getShortClasName(NormalizableInterface $value): string
-    {
-        $className = $value instanceof NormalizableWrapperInterface
-            ? get_class($value->getWrappedObject())
-            : get_class($value);
-        $offset = strrpos($className, '\\');
-        $offset = $offset === false
-            ? 0
-            : $offset + 1;
-
-        return substr($className, $offset);
     }
 
     public function setKeyDecorator(KeyDecoratorInterface $keyDecorator): void

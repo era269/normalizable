@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Era269\Normalizable\Normalizer\Normalizer;
+namespace Era269\Normalizable\Normalizer;
 
-use Era269\Normalizable\Normalizer\KeyDecoratorAwareInterface;
-use Era269\Normalizable\Normalizer\KeyDecoratorInterface;
-use Era269\Normalizable\Normalizer\NormalizerAwareInterface;
+use Era269\Normalizable\KeyDecoratorAwareInterface;
+use Era269\Normalizable\KeyDecoratorInterface;
+use Era269\Normalizable\NormalizerAwareInterface;
 use Era269\Normalizable\NormalizerInterface;
 use LogicException;
 

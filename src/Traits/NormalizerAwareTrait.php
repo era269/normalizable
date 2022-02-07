@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Era269\Normalizable\Normalizer\Traits;
+namespace Era269\Normalizable\Traits;
 
 use Era269\Normalizable\NormalizerInterface;
 

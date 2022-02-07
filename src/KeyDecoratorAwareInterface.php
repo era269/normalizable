@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Era269\Normalizable\Normalizer;
+namespace Era269\Normalizable;
 
 interface KeyDecoratorAwareInterface
 {

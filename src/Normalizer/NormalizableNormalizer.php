@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Era269\Normalizable\Normalizer\Normalizer;
+namespace Era269\Normalizable\Normalizer;
 
+use Era269\Normalizable\KeyDecoratorAwareInterface;
 use Era269\Normalizable\NormalizableInterface;
-use Era269\Normalizable\Normalizer\KeyDecoratorAwareInterface;
-use Era269\Normalizable\Normalizer\NormalizerAwareInterface;
-use Era269\Normalizable\Normalizer\Traits\KeyDecoratorAwareTrait;
-use Era269\Normalizable\Normalizer\Traits\NormalizerAwareTrait;
+use Era269\Normalizable\NormalizerAwareInterface;
 use Era269\Normalizable\NormalizerInterface;
+use Era269\Normalizable\Traits\KeyDecoratorAwareTrait;
+use Era269\Normalizable\Traits\NormalizerAwareTrait;
 
 class NormalizableNormalizer implements NormalizerInterface, NormalizerAwareInterface, KeyDecoratorAwareInterface
 {

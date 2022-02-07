@@ -6,7 +6,7 @@ namespace Era269\Normalizable\Tests\Adapter;
 
 use Era269\Normalizable\Adapter\ListNormalizableToNormalizableAdapter;
 use Era269\Normalizable\NormalizableInterface;
-use Era269\Normalizable\Normalizer\Normalizer\DefaultNormalizationFacade;
+use Era269\Normalizable\Normalizer\DefaultNormalizationFacade;
 use Era269\Normalizable\Object\Normalizable;
 use PHPUnit\Framework\TestCase;
 

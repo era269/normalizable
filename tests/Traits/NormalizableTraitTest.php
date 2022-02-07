@@ -5,19 +5,23 @@ declare(strict_types=1);
 namespace Era269\Normalizable\Tests\Traits;
 
 use DateTimeInterface;
+use Era269\Normalizable\KeyDecoratorAwareInterface;
 use Era269\Normalizable\NormalizableInterface;
-use Era269\Normalizable\Normalizer\KeyDecoratorAwareInterface;
-use Era269\Normalizable\Normalizer\Normalizer\DefaultNormalizationFacade;
-use Era269\Normalizable\Normalizer\NormalizerAwareInterface;
+use Era269\Normalizable\Normalizer\DefaultNormalizationFacade;
+use Era269\Normalizable\NormalizerAwareInterface;
 use Era269\Normalizable\Object\DateTimeRfc3339Normalizable;
 use Era269\Normalizable\Object\IntegerObject;
 use Era269\Normalizable\Object\StringObject;
 use Era269\Normalizable\Traits\NormalizableTrait;
-use Era269\Normalizable\Traits\SimpleNormalizableTrait;
 use Exception;
+use LogicException;
 use PHPUnit\Framework\TestCase;
 use ReflectionObject;
+use SplObjectStorage;
 
+/**
+ * @covers \Era269\Normalizable\Normalizer\DefaultNormalizationFacade
+ */
 class NormalizableTraitTest extends TestCase
 {
     public function testNormalize(): void
@@ -31,12 +35,19 @@ class NormalizableTraitTest extends TestCase
         );
     }
 
+    public function testNormalizeFail(): void
+    {
+        self::expectException(LogicException::class);
+        $object = new SplObjectStorage();
+        (new DefaultNormalizationFacade())->normalize($object);
+    }
+
     /**
      * @param object $stringable
      */
     private function createAutoNormalizable(
         DateTimeRfc3339Normalizable $dateTimeRfc3339Normalizable,
-        $stringable
+                                    $stringable
     ): NormalizableInterface
     {
         return new class (

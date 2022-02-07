@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Era269\Normalizable\Normalizer\Normalizer;
+namespace Era269\Normalizable\Normalizer;
 
-use Era269\Normalizable\Normalizer\KeyDecorator\AsIsKeyDecorator;
+use Era269\Normalizable\KeyDecorator\AsIsKeyDecorator;
 
 class DefaultNormalizationFacade extends NormalizationFacade
 {
@@ -15,7 +15,7 @@ class DefaultNormalizationFacade extends NormalizationFacade
             [
                 new NotObjectNormalizer(),
                 new ListNormalizableToNormalizableAdapterNormalizer(),
-                new ShortClassNameTypeNormalizableNormalizerDecorator(
+                new WithTypeNormalizableNormalizerDecorator(
                     new NormalizableNormalizer()
                 ),
                 new ScalarableNormalizer(),

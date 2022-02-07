@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Era269\Normalizable\Tests\Object;
 
-use Era269\Normalizable\Normalizer\Normalizer\DefaultNormalizationFacade;
+use Era269\Normalizable\Normalizer\DefaultNormalizationFacade;
 use Era269\Normalizable\Object\StringNormalizable;
 use PHPUnit\Framework\TestCase;
 
@@ -15,7 +15,7 @@ class StringNormalizableTest extends TestCase
 
     public function test(): void
     {
-        /** @var array $normalized */
+        /** @var array<mixed> $normalized */
         $normalized = (new DefaultNormalizationFacade())
             ->normalize(new StringNormalizable('some_string'));
         self::assertArrayHasKey(

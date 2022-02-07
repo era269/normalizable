@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Era269\Normalizable\Adapter;
 
+use Era269\Normalizable\KeyDecoratorAwareInterface;
 use Era269\Normalizable\NormalizableInterface;
-use Era269\Normalizable\NormalizableWrapperInterface;
-use Era269\Normalizable\Normalizer\KeyDecoratorAwareInterface;
-use Era269\Normalizable\Normalizer\NormalizerAwareInterface;
+use Era269\Normalizable\NormalizerAwareInterface;
+use Era269\Normalizable\Object\ShortClassName;
 use Era269\Normalizable\Traits\NormalizableTrait;
+use Era269\Normalizable\TypeAwareInterface;
 use Throwable;
 
-class ThrowableToNormalizableAdapter implements NormalizableWrapperInterface, NormalizableInterface, NormalizerAwareInterface, KeyDecoratorAwareInterface
+class ThrowableToNormalizableAdapter implements TypeAwareInterface, NormalizableInterface, NormalizerAwareInterface, KeyDecoratorAwareInterface
 {
     use NormalizableTrait;
 
@@ -60,8 +61,8 @@ class ThrowableToNormalizableAdapter implements NormalizableWrapperInterface, No
         return $throwable->getTrace();
     }
 
-    public function getWrappedObject()
+    public function getType(): string
     {
-        return $this->throwable;
+        return (string) new ShortClassName($this->throwable);
     }
 }

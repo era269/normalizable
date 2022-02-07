@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Era269\Normalizable\Normalizer\KeyDecorator;
+namespace Era269\Normalizable\KeyDecorator;
 
-use Era269\Normalizable\Normalizer\KeyDecoratorInterface;
+use Era269\Normalizable\KeyDecoratorInterface;
 
 final class AsIsKeyDecorator implements KeyDecoratorInterface
 {

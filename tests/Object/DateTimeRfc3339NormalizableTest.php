@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Era269\Normalizable\Tests\Object;
 
-use Era269\Normalizable\Normalizer\Normalizer\DefaultNormalizationFacade;
+use Era269\Normalizable\Normalizer\DefaultNormalizationFacade;
 use Era269\Normalizable\Object\DateTimeRfc3339Normalizable;
 use PHPUnit\Framework\TestCase;
 use UnexpectedValueException;
