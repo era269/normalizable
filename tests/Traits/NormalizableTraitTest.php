@@ -35,6 +35,17 @@ class NormalizableTraitTest extends TestCase
         );
     }
 
+    public function testDeprecatedNormalize(): void
+    {
+        $dateTime = new DateTimeRfc3339Normalizable();
+        $stringable = new Exception('message', 269);
+        $normalizable = $this->createAutoNormalizable($dateTime, $stringable);
+        self::assertEquals(
+            $this->getExpectedNormalized($normalizable, $dateTime, $stringable, 1),
+            $normalizable->normalize()
+        );
+    }
+
     public function testNormalizeFail(): void
     {
         self::expectException(LogicException::class);

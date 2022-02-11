@@ -7,6 +7,7 @@ namespace Era269\Normalizable\Traits;
 use Era269\Normalizable\KeyDecoratorInterface;
 use Era269\Normalizable\NormalizableInterface;
 use Era269\Normalizable\NormalizerInterface;
+use Era269\Normalizable\Object\ShortClassName;
 use Era269\Normalizable\ScalarableInterface;
 use LogicException;
 
@@ -42,6 +43,7 @@ trait NormalizableTrait
             $decoratedKey = isset($this->_keyDecorator) ? $this->_keyDecorator->decorate($key) : $key;
             $normalized[$decoratedKey] = $normalizedVar;
         }
+        $this->addTypeIfNeeded($normalized);
 
         return $normalized;
     }
@@ -105,5 +107,17 @@ trait NormalizableTrait
     private function isStringable($value): bool
     {
         return method_exists($value, '__toString');
+    }
+
+    /**
+     * @param array<int|string, null|int|string|bool|array<int|string, mixed>> $normalized
+     *
+     * @deprecated was added for back compatibility
+     */
+    private function addTypeIfNeeded(array &$normalized): void
+    {
+        if (!isset($this->_normalizer)) {
+            $normalized['@type'] = (string) (new ShortClassName($this));
+        }
     }
 }
