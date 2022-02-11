@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Era269\Normalizable\Object;
 
-use LogicException;
-
 final class ShortClassName extends StringObject
 {
     /**
@@ -13,9 +11,6 @@ final class ShortClassName extends StringObject
      */
     public function __construct($object)
     {
-        if (!is_object($object)) {
-            throw new LogicException('Parameter has to be an object');
-        }
         $className = get_class($object);
         $offset = strrpos($className, '\\');
         $offset = $offset === false
