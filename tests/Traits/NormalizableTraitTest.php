@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Era269\Normalizable\Tests\Traits;
 
+use DateTime;
 use DateTimeInterface;
 use Era269\Normalizable\KeyDecoratorAwareInterface;
 use Era269\Normalizable\NormalizableInterface;
@@ -50,6 +51,25 @@ class NormalizableTraitTest extends TestCase
     {
         self::expectException(LogicException::class);
         $object = new SplObjectStorage();
+        (new DefaultNormalizationFacade())->normalize($object);
+    }
+
+    public function testDeprecatedNormalizeFail(): void
+    {
+        self::expectException(LogicException::class);
+        $object = new class implements NormalizableInterface {
+            use NormalizableTrait;
+
+            /**
+             * @var DateTime
+             */
+            private $notNormalizableObject;
+
+            public function __construct()
+            {
+                $this->notNormalizableObject = new DateTime();
+            }
+        };
         (new DefaultNormalizationFacade())->normalize($object);
     }
 
@@ -131,18 +151,18 @@ class NormalizableTraitTest extends TestCase
              * @param array<int, mixed> $privateArray
              */
             public function __construct(
-                int $publicInt,
-                int $publicIntManuallyNormalized,
-                int $privateInt,
-                int $protectedInt,
-                ?int $privateNullableInt,
-                string $privateString,
-                bool $privateBool,
-                array $privateArray,
-                IntegerObject $integerObject,
-                StringObject $stringObject,
+                int               $publicInt,
+                int               $publicIntManuallyNormalized,
+                int               $privateInt,
+                int               $protectedInt,
+                ?int              $privateNullableInt,
+                string            $privateString,
+                bool              $privateBool,
+                array             $privateArray,
+                IntegerObject     $integerObject,
+                StringObject      $stringObject,
                 DateTimeInterface $dateTimeRfc3339Normalizable,
-                $stringable
+                                  $stringable
             )
             {
                 $this->publicInt = $publicInt;
@@ -167,10 +187,10 @@ class NormalizableTraitTest extends TestCase
      * @return array<string, mixed>
      */
     private function getExpectedNormalized(
-        NormalizableInterface $normalizable,
+        NormalizableInterface       $normalizable,
         DateTimeRfc3339Normalizable $dateTime,
-        $stringable,
-        int $publicIntManuallyNormalized
+                                    $stringable,
+        int                         $publicIntManuallyNormalized
     ): array
     {
         return [
