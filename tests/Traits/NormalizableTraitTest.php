@@ -70,7 +70,7 @@ class NormalizableTraitTest extends TestCase
                 $this->notNormalizableObject = new DateTime();
             }
         };
-        (new DefaultNormalizationFacade())->normalize($object);
+        $object->normalize();
     }
 
     /**
@@ -178,6 +178,16 @@ class NormalizableTraitTest extends TestCase
                 $this->dateTimeRfc3339Normalizable = $dateTimeRfc3339Normalizable;
                 $this->stringable = $stringable;
             }
+
+            /**
+             * @inheritDoc
+             */
+            public function normalize(): array
+            {
+                return $this->getAutoNormalized([
+                    'publicIntManuallyNormalized' => 1 + $this->publicIntManuallyNormalized,
+                ]);
+            }
         };
     }
 
@@ -196,7 +206,7 @@ class NormalizableTraitTest extends TestCase
         return [
             '@type' => (new ReflectionObject($normalizable))->getShortName(),
             'publicInt' => 1,
-            'publicIntManuallyNormalized' => $publicIntManuallyNormalized,
+            'publicIntManuallyNormalized' => 1 + $publicIntManuallyNormalized,
             'privateInt' => 2,
             'protectedInt' => 3,
             'privateNullableInt' => null,
