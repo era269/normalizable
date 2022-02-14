@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Era269\Normalizable\Normalizer;
 
-use Era269\Normalizable\KeyDecoratorAwareInterface;
-use Era269\Normalizable\KeyDecoratorInterface;
 use Era269\Normalizable\NormalizableInterface;
-use Era269\Normalizable\NormalizerAwareInterface;
+use Era269\Normalizable\NormalizationFacadeAwareInterface;
+use Era269\Normalizable\NormalizationFacadeInterface;
 use Era269\Normalizable\NormalizerInterface;
 use Era269\Normalizable\Object\ShortClassName;
 use Era269\Normalizable\TypeAwareInterface;
 
-final class WithTypeNormalizableNormalizerDecorator implements NormalizerInterface, NormalizerAwareInterface, KeyDecoratorAwareInterface
+final class WithTypeNormalizableNormalizerDecorator implements NormalizerInterface, NormalizationFacadeAwareInterface
 {
     private const FIELD_NAME_TYPE = '@type';
     /**
@@ -49,17 +48,10 @@ final class WithTypeNormalizableNormalizerDecorator implements NormalizerInterfa
         return $normalized;
     }
 
-    public function setKeyDecorator(KeyDecoratorInterface $keyDecorator): void
+    public function setNormalizationFacade(NormalizationFacadeInterface $normalizationFacade): void
     {
-        if ($this->decoratedNormalizer instanceof KeyDecoratorAwareInterface) {
-            $this->decoratedNormalizer->setKeyDecorator($keyDecorator);
-        }
-    }
-
-    public function setNormalizer(NormalizerInterface $normalizer): void
-    {
-        if ($this->decoratedNormalizer instanceof NormalizerAwareInterface) {
-            $this->decoratedNormalizer->setNormalizer($normalizer);
+        if ($this->decoratedNormalizer instanceof NormalizationFacadeAwareInterface) {
+            $this->decoratedNormalizer->setNormalizationFacade($normalizationFacade);
         }
     }
 }

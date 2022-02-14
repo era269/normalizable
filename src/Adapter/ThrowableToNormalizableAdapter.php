@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Era269\Normalizable\Adapter;
 
-use Era269\Normalizable\KeyDecoratorAwareInterface;
 use Era269\Normalizable\NormalizableInterface;
-use Era269\Normalizable\NormalizerAwareInterface;
+use Era269\Normalizable\NormalizationFacadeAwareInterface;
 use Era269\Normalizable\Object\ShortClassName;
 use Era269\Normalizable\Traits\NormalizableTrait;
 use Era269\Normalizable\TypeAwareInterface;
 use Throwable;
 
-class ThrowableToNormalizableAdapter implements TypeAwareInterface, NormalizableInterface, NormalizerAwareInterface, KeyDecoratorAwareInterface
+class ThrowableToNormalizableAdapter implements TypeAwareInterface, NormalizableInterface, NormalizationFacadeAwareInterface
 {
     use NormalizableTrait;
 

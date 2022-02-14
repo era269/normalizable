@@ -4,23 +4,13 @@ declare(strict_types=1);
 
 namespace Era269\Normalizable\Traits;
 
-use Era269\Normalizable\KeyDecoratorInterface;
 use Era269\Normalizable\NormalizableInterface;
-use Era269\Normalizable\NormalizerInterface;
 use Era269\Normalizable\Object\ShortClassName;
-use Era269\Normalizable\ScalarableInterface;
-use LogicException;
+use Throwable;
 
 trait NormalizableTrait
 {
-    /**
-     * @var NormalizerInterface|null
-     */
-    private $_normalizer;
-    /**
-     * @var KeyDecoratorInterface|null
-     */
-    private $_keyDecorator;
+    use NormalizationFacadeAwareTrait;
 
     /**
      * @return array<int|string, null|int|string|bool|array<int|string, mixed>>
@@ -38,24 +28,53 @@ trait NormalizableTrait
     private function getAutoNormalized(array $objectVars = []): array
     {
         $normalized = [];
+        $this
+            ->addTypeIfNeeded($normalized)
+            ->addNormalizedParentIfPossible($normalized);
+
         foreach (array_merge($this->getObjectVars(), $objectVars) as $key => $var) {
-            $normalizedVar = isset($this->_normalizer) ? $this->_normalizer->normalize($var) : $this->extractScalar($var);
-            $decoratedKey = isset($this->_keyDecorator) ? $this->_keyDecorator->decorate($key) : $key;
+            $normalizedVar = $this->getNormalizationFacade()->normalize($var);
+            $decoratedKey = $this->getNormalizationFacade()->decorate($key);
             $normalized[$decoratedKey] = $normalizedVar;
         }
-        $this->addTypeIfNeeded($normalized);
 
         return $normalized;
     }
 
-    public function setNormalizer(NormalizerInterface $normalizer): void
+    /**
+     * @param array<int|string, null|int|string|bool|array<int|string, mixed>> $normalized
+     */
+    private function addNormalizedParentIfPossible(array &$normalized): self
     {
-        $this->_normalizer = $normalizer;
+        $parentClass = (string) get_parent_class($this);
+
+        $isParentNormalizable = is_subclass_of($parentClass, NormalizableInterface::class);
+        $isParentNormalizeCallable = is_callable([$parentClass, 'normalize']);
+        if (!$isParentNormalizable && $isParentNormalizeCallable) {
+            return $this;
+        }
+        try {
+            $normalizedParent = parent::normalize();
+        } catch (Throwable $e) {
+            $normalizedParent = [];
+        }
+        $normalized = array_merge($normalized, $normalizedParent);
+
+        return $this;
     }
 
-    public function setKeyDecorator(KeyDecoratorInterface $keyDecorator): void
+    /**
+     * @param array<int|string, null|int|string|bool|array<int|string, mixed>> $normalized
+     *
+     * @deprecated was added for back compatibility
+     */
+    private function addTypeIfNeeded(array &$normalized): self
     {
-        $this->_keyDecorator = $keyDecorator;
+        if (!isset($this->_normalizationFacade)) {
+            $normalized['@type'] = (string) (new ShortClassName($this));
+        }
+
+        return $this;
     }
 
     /**
@@ -64,60 +83,8 @@ trait NormalizableTrait
     private function getObjectVars(): array
     {
         $objectVars = get_object_vars($this);
-        unset($objectVars['_normalizer'], $objectVars['_keyDecorator']);
+        unset($objectVars['_normalizationFacade']);
 
         return $objectVars;
-    }
-
-    /**
-     * @param null|int|float|string|bool|array<mixed, mixed>|object $value
-     *
-     * @return null|int|float|string|bool|array<mixed, mixed>
-     * @deprecated left for back compatibility
-     *
-     */
-    private function extractScalar($value)
-    {
-        switch (true) {
-            case !is_object($value):
-                return $value;
-
-            case $value instanceof NormalizableInterface:
-                return $value->normalize();
-
-            case $value instanceof ScalarableInterface:
-                return $value->toScalar();
-
-            case $this->isStringable($value):
-                return (string) $value;
-
-            default:
-                throw new LogicException(sprintf(
-                    'Value "%s", but MUST be scalar or implement any of [%s, %s]',
-                    get_class($value),
-                    NormalizableInterface::class,
-                    ScalarableInterface::class
-                ));
-        }
-    }
-
-    /**
-     * @param object $value
-     */
-    private function isStringable($value): bool
-    {
-        return method_exists($value, '__toString');
-    }
-
-    /**
-     * @param array<int|string, null|int|string|bool|array<int|string, mixed>> $normalized
-     *
-     * @deprecated was added for back compatibility
-     */
-    private function addTypeIfNeeded(array &$normalized): void
-    {
-        if (!isset($this->_normalizer)) {
-            $normalized['@type'] = (string) (new ShortClassName($this));
-        }
     }
 }

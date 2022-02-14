@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Era269\Normalizable\Normalizer;
 
-use Era269\Normalizable\KeyDecoratorAwareInterface;
 use Era269\Normalizable\NormalizableInterface;
-use Era269\Normalizable\NormalizerAwareInterface;
+use Era269\Normalizable\NormalizationFacadeAwareInterface;
 use Era269\Normalizable\NormalizerInterface;
 use Era269\Normalizable\Traits\KeyDecoratorAwareTrait;
-use Era269\Normalizable\Traits\NormalizerAwareTrait;
+use Era269\Normalizable\Traits\NormalizationFacadeAwareTrait;
 
-class NormalizableNormalizer implements NormalizerInterface, NormalizerAwareInterface, KeyDecoratorAwareInterface
+class NormalizableNormalizer implements NormalizerInterface, NormalizationFacadeAwareInterface
 {
-    use NormalizerAwareTrait;
+    use NormalizationFacadeAwareTrait;
     use KeyDecoratorAwareTrait;
 
     public function supports($value): bool
@@ -23,11 +22,8 @@ class NormalizableNormalizer implements NormalizerInterface, NormalizerAwareInte
 
     public function normalize($value)
     {
-        if ($value instanceof NormalizerAwareInterface) {
-            $value->setNormalizer($this->normalizer);
-        }
-        if ($value instanceof KeyDecoratorAwareInterface) {
-            $value->setKeyDecorator($this->keyDecorator);
+        if ($value instanceof NormalizationFacadeAwareInterface) {
+            $value->setNormalizationFacade($this->getNormalizationFacade());
         }
 
         /** @var NormalizableInterface $value */

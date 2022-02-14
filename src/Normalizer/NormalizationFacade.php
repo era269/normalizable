@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Era269\Normalizable\Normalizer;
 
-use Era269\Normalizable\KeyDecoratorAwareInterface;
 use Era269\Normalizable\KeyDecoratorInterface;
-use Era269\Normalizable\NormalizerAwareInterface;
+use Era269\Normalizable\NormalizationFacadeAwareInterface;
+use Era269\Normalizable\NormalizationFacadeInterface;
 use Era269\Normalizable\NormalizerInterface;
 use LogicException;
 
-class NormalizationFacade implements NormalizerInterface, KeyDecoratorInterface
+class NormalizationFacade implements NormalizationFacadeInterface
 {
     /**
      * @var NormalizerInterface[]
@@ -28,11 +28,8 @@ class NormalizationFacade implements NormalizerInterface, KeyDecoratorInterface
     {
         $this->keyDecorator = $keyDecorator;
         foreach ($normalizers as $normalizer) {
-            if ($normalizer instanceof NormalizerAwareInterface) {
-                $normalizer->setNormalizer($this);
-            }
-            if ($normalizer instanceof KeyDecoratorAwareInterface) {
-                $normalizer->setKeyDecorator($this);
+            if ($normalizer instanceof NormalizationFacadeAwareInterface) {
+                $normalizer->setNormalizationFacade($this);
             }
             $this->normalizers[] = $normalizer;
         }

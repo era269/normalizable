@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Era269\Normalizable\Adapter;
 
-use Era269\Normalizable\KeyDecoratorAwareInterface;
 use Era269\Normalizable\NormalizableInterface;
-use Era269\Normalizable\NormalizerAwareInterface;
+use Era269\Normalizable\NormalizationFacadeAwareInterface;
 use Era269\Normalizable\Traits\NormalizableTrait;
 
-class ListNormalizableToNormalizableAdapter implements NormalizableInterface, NormalizerAwareInterface, KeyDecoratorAwareInterface
+class ListNormalizableToNormalizableAdapter implements NormalizableInterface, NormalizationFacadeAwareInterface
 {
     use NormalizableTrait;
 

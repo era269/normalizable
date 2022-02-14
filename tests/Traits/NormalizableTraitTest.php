@@ -6,12 +6,13 @@ namespace Era269\Normalizable\Tests\Traits;
 
 use DateTime;
 use DateTimeInterface;
-use Era269\Normalizable\KeyDecoratorAwareInterface;
 use Era269\Normalizable\NormalizableInterface;
+use Era269\Normalizable\NormalizationFacadeAwareInterface;
 use Era269\Normalizable\Normalizer\DefaultNormalizationFacade;
-use Era269\Normalizable\NormalizerAwareInterface;
 use Era269\Normalizable\Object\DateTimeRfc3339Normalizable;
 use Era269\Normalizable\Object\IntegerObject;
+use Era269\Normalizable\Object\ShortClassName;
+use Era269\Normalizable\Object\StringNormalizable;
 use Era269\Normalizable\Object\StringObject;
 use Era269\Normalizable\Traits\NormalizableTrait;
 use Exception;
@@ -73,6 +74,38 @@ class NormalizableTraitTest extends TestCase
         $object->normalize();
     }
 
+    public function testInheritance(): void
+    {
+        $class = new class ('a', 'b') extends StringNormalizable {
+            use NormalizableTrait;
+
+            /**
+             * @var string
+             */
+            private $childValue;
+
+            public function __construct(string $value, string $childParam)
+            {
+                parent::__construct($value);
+                $this->childValue = $childParam;
+            }
+        };
+
+        $expected = [
+            '@type' => (string) new ShortClassName($class),
+            'value' => 'a',
+            'childValue' => 'b',
+        ];
+        self::assertEquals(
+            $expected,
+            $class->normalize()
+        );
+        self::assertEquals(
+            $expected,
+            (new DefaultNormalizationFacade())->normalize($class)
+        );
+    }
+
     /**
      * @param object $stringable
      */
@@ -94,7 +127,7 @@ class NormalizableTraitTest extends TestCase
             new StringObject('10'),
             $dateTimeRfc3339Normalizable,
             $stringable
-        ) implements NormalizableInterface, KeyDecoratorAwareInterface, NormalizerAwareInterface {
+        ) implements NormalizableInterface, NormalizationFacadeAwareInterface {
             use NormalizableTrait;
 
             /**
