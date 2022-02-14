@@ -71,24 +71,20 @@ trait NormalizableTrait
     private function getParentNormalized(): array
     {
         $parentClass = (string) get_parent_class(self::class);
-        // @phpstan-ignore-next-line
-        $isParentNormalizable = is_subclass_of($parentClass, NormalizableInterface::class);
-        // @phpstan-ignore-next-line
-        $isParentNormalizeCallable = is_callable([$parentClass, 'normalize']);
+        $isParentNormalizable = is_subclass_of($parentClass, NormalizableInterface::class); //@phpstan-ignore-line
+        $isParentNormalizeCallable = is_callable([$parentClass, 'normalize']); //@phpstan-ignore-line
 
-        // @phpstan-ignore-next-line
-        if (!($isParentNormalizable && $isParentNormalizeCallable)) {
+        if (!($isParentNormalizable && $isParentNormalizeCallable)) { //@phpstan-ignore-line
             return [];
         }
-        // @phpstan-ignore-next-line
-        if (is_subclass_of($parentClass, NormalizationFacadeAwareInterface::class)) {
-            // @phpstan-ignore-next-line
-            parent::setNormalizationFacade(
+        // @codeCoverageIgnoreStart
+        if (is_subclass_of($parentClass, NormalizationFacadeAwareInterface::class)) { //@phpstan-ignore-line
+            parent::setNormalizationFacade( //@phpstan-ignore-line
                 $this->getNormalizationFacade()
             );
         }
 
-        // @phpstan-ignore-next-line
-        return parent::normalize();
+        return parent::normalize(); //@phpstan-ignore-line
+        // @codeCoverageIgnoreEnd
     }
 }
