@@ -10,7 +10,7 @@ use Era269\Normalizable\Normalizer\DefaultNormalizationFacade;
 trait NormalizationFacadeAwareTrait
 {
     /**
-     * @var NormalizationFacadeInterface
+     * @var ?NormalizationFacadeInterface
      */
     private $_normalizationFacade;
 
@@ -21,7 +21,7 @@ trait NormalizationFacadeAwareTrait
 
     private function getNormalizationFacade(): NormalizationFacadeInterface
     {
-        if (empty($this->_normalizationFacade)) {
+        if (!isset($this->_normalizationFacade)) {
             $this->_normalizationFacade = new DefaultNormalizationFacade();
         }
 

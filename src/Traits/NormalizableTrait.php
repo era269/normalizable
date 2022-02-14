@@ -49,7 +49,6 @@ trait NormalizableTrait
      */
     private function addTypeIfNeeded(array &$normalized): void
     {
-        // @phpstan-ignore-next-line
         if (!isset($this->_normalizationFacade)) {
             $normalized['@type'] = (string) (new ShortClassName($this));
         }
