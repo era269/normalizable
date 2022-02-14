@@ -49,6 +49,7 @@ trait NormalizableTrait
      */
     private function addTypeIfNeeded(array &$normalized): void
     {
+        // @phpstan-ignore-next-line
         if (!isset($this->_normalizationFacade)) {
             $normalized['@type'] = (string) (new ShortClassName($this));
         }
@@ -71,24 +72,27 @@ trait NormalizableTrait
     private function getParentNormalized(): array
     {
         $parentClass = (string) get_parent_class(self::class);
+        // @phpstan-ignore-next-line
         $isParentNormalizable = is_subclass_of($parentClass, NormalizableInterface::class);
+        // @phpstan-ignore-next-line
         $isParentNormalizeCallable = is_callable([$parentClass, 'normalize']);
 
+        // @phpstan-ignore-next-line
         if (!($isParentNormalizable && $isParentNormalizeCallable)) {
             return [];
         }
+        // @phpstan-ignore-next-line
         if (is_subclass_of($parentClass, NormalizationFacadeAwareInterface::class)) {
             /**
              * @phpstan-ignore-line
              */
+            // @phpstan-ignore-next-line
             parent::setNormalizationFacade(
                 $this->getNormalizationFacade()
             );
         }
 
-        /**
-         * @phpstan-ignore-line
-         */
+        // @phpstan-ignore-next-line
         return parent::normalize();
     }
 }
