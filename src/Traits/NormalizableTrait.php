@@ -50,7 +50,7 @@ trait NormalizableTrait
 
         $isParentNormalizable = is_subclass_of($parentClass, NormalizableInterface::class);
         $isParentNormalizeCallable = is_callable([$parentClass, 'normalize']);
-        if (!$isParentNormalizable && $isParentNormalizeCallable) {
+        if (!($isParentNormalizable && $isParentNormalizeCallable)) {
             return $this;
         }
         try {
