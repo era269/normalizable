@@ -6,9 +6,18 @@ namespace Era269\Normalizable\Tests\Traits;
 
 use DateTime;
 use DateTimeInterface;
+use Era269\Normalizable\KeyDecoratorInterface;
 use Era269\Normalizable\NormalizableInterface;
 use Era269\Normalizable\NormalizationFacadeAwareInterface;
 use Era269\Normalizable\Normalizer\DefaultNormalizationFacade;
+use Era269\Normalizable\Normalizer\FailNormalizer;
+use Era269\Normalizable\Normalizer\ListNormalizableToNormalizableAdapterNormalizer;
+use Era269\Normalizable\Normalizer\NormalizableNormalizer;
+use Era269\Normalizable\Normalizer\NormalizationFacade;
+use Era269\Normalizable\Normalizer\NotObjectNormalizer;
+use Era269\Normalizable\Normalizer\ScalarableNormalizer;
+use Era269\Normalizable\Normalizer\StringableNormalizer;
+use Era269\Normalizable\Normalizer\WithTypeNormalizableNormalizerDecorator;
 use Era269\Normalizable\Object\DateTimeRfc3339Normalizable;
 use Era269\Normalizable\Object\IntegerObject;
 use Era269\Normalizable\Object\ShortClassName;
@@ -74,7 +83,7 @@ class NormalizableTraitTest extends TestCase
         $object->normalize();
     }
 
-    public function testInheritance(): void
+    public function testInheritanceDeprecated(): void
     {
         $class = new class ('a', 'b') extends StringNormalizable {
             use NormalizableTrait;
@@ -100,9 +109,82 @@ class NormalizableTraitTest extends TestCase
             $expected,
             $class->normalize()
         );
+
+        $normalizationFacade = new NormalizationFacade(
+            new class implements KeyDecoratorInterface {
+                public function decorate($value)
+                {
+                    return strtoupper((string) $value);
+                }
+            },
+            [
+                new NotObjectNormalizer(),
+                new ListNormalizableToNormalizableAdapterNormalizer(),
+                new WithTypeNormalizableNormalizerDecorator(
+                    new NormalizableNormalizer()
+                ),
+                new ScalarableNormalizer(),
+                new StringableNormalizer(),
+                new FailNormalizer(),
+            ]
+        );
+
+        self::assertEquals(
+            [
+                '@type' => (string) new ShortClassName($class),
+                'VALUE' => 'a',
+                'CHILDVALUE®' => 'b',
+            ],
+            $normalizationFacade->normalize($class)
+        );
+    }
+
+    public function testInheritance(): void
+    {
+        $class = new class ('a', 'b') extends StringNormalizable {
+            use NormalizableTrait;
+
+            /**
+             * @var string
+             */
+            private $childValue;
+
+            public function __construct(string $value, string $childParam)
+            {
+                parent::__construct($value);
+                $this->childValue = $childParam;
+            }
+        };
+
+        $expected = [
+            '@type' => (string) new ShortClassName($class),
+            'VALUE' => 'a',
+            'CHILDVALUE' => 'b',
+        ];
+
+        $normalizationFacade = new NormalizationFacade(
+            new class implements KeyDecoratorInterface {
+                public function decorate($value)
+                {
+                    return strtoupper((string) $value);
+                }
+            },
+            [
+                new NotObjectNormalizer(),
+                new ListNormalizableToNormalizableAdapterNormalizer(),
+                new WithTypeNormalizableNormalizerDecorator(
+                    new NormalizableNormalizer()
+                ),
+                new ScalarableNormalizer(),
+                new StringableNormalizer(),
+                new FailNormalizer(),
+            ]
+        );
+        $normalizationFacade->normalize($class);
+//        var_dump($class);
         self::assertEquals(
             $expected,
-            (new DefaultNormalizationFacade())->normalize($class)
+            $normalizationFacade->normalize($class)
         );
     }
 

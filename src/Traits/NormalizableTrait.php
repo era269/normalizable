@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Era269\Normalizable\Traits;
 
 use Era269\Normalizable\NormalizableInterface;
+use Era269\Normalizable\NormalizationFacadeAwareInterface;
 use Era269\Normalizable\Object\ShortClassName;
-use Throwable;
 
 trait NormalizableTrait
 {
@@ -28,9 +28,7 @@ trait NormalizableTrait
     private function getAutoNormalized(array $objectVars = []): array
     {
         $normalized = [];
-        $this
-            ->addTypeIfNeeded($normalized)
-            ->addNormalizedParentIfPossible($normalized);
+        $this->addTypeIfNeeded($normalized);
 
         foreach (array_merge($this->getObjectVars(), $objectVars) as $key => $var) {
             $normalizedVar = $this->getNormalizationFacade()->normalize($var);
@@ -38,29 +36,10 @@ trait NormalizableTrait
             $normalized[$decoratedKey] = $normalizedVar;
         }
 
-        return $normalized;
-    }
-
-    /**
-     * @param array<int|string, null|int|string|bool|array<int|string, mixed>> $normalized
-     */
-    private function addNormalizedParentIfPossible(array &$normalized): self
-    {
-        $parentClass = (string) get_parent_class($this);
-
-        $isParentNormalizable = is_subclass_of($parentClass, NormalizableInterface::class);
-        $isParentNormalizeCallable = is_callable([$parentClass, 'normalize']);
-        if (!($isParentNormalizable && $isParentNormalizeCallable)) {
-            return $this;
-        }
-        try {
-            $normalizedParent = parent::normalize();
-        } catch (Throwable $e) {
-            $normalizedParent = [];
-        }
-        $normalized = array_merge($normalized, $normalizedParent);
-
-        return $this;
+        return array_merge(
+            $this->getParentNormalized(),
+            $normalized
+        );
     }
 
     /**
@@ -68,13 +47,11 @@ trait NormalizableTrait
      *
      * @deprecated was added for back compatibility
      */
-    private function addTypeIfNeeded(array &$normalized): self
+    private function addTypeIfNeeded(array &$normalized): void
     {
         if (!isset($this->_normalizationFacade)) {
             $normalized['@type'] = (string) (new ShortClassName($this));
         }
-
-        return $this;
     }
 
     /**
@@ -86,5 +63,32 @@ trait NormalizableTrait
         unset($objectVars['_normalizationFacade']);
 
         return $objectVars;
+    }
+
+    /**
+     * @return array<int|string, null|int|string|bool|array<int|string, mixed>>
+     */
+    private function getParentNormalized(): array
+    {
+        $parentClass = (string) get_parent_class(self::class);
+        $isParentNormalizable = is_subclass_of($parentClass, NormalizableInterface::class);
+        $isParentNormalizeCallable = is_callable([$parentClass, 'normalize']);
+
+        if (!($isParentNormalizable && $isParentNormalizeCallable)) {
+            return [];
+        }
+        if (is_subclass_of($parentClass, NormalizationFacadeAwareInterface::class)) {
+            /**
+             * @phpstan-ignore-line
+             */
+            parent::setNormalizationFacade(
+                $this->getNormalizationFacade()
+            );
+        }
+
+        /**
+         * @phpstan-ignore-line
+         */
+        return parent::normalize();
     }
 }

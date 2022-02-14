@@ -7,13 +7,11 @@ namespace Era269\Normalizable\Normalizer;
 use Era269\Normalizable\NormalizableInterface;
 use Era269\Normalizable\NormalizationFacadeAwareInterface;
 use Era269\Normalizable\NormalizerInterface;
-use Era269\Normalizable\Traits\KeyDecoratorAwareTrait;
 use Era269\Normalizable\Traits\NormalizationFacadeAwareTrait;
 
 class NormalizableNormalizer implements NormalizerInterface, NormalizationFacadeAwareInterface
 {
     use NormalizationFacadeAwareTrait;
-    use KeyDecoratorAwareTrait;
 
     public function supports($value): bool
     {
