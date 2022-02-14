@@ -133,7 +133,7 @@ class NormalizableTraitTest extends TestCase
             [
                 '@type' => (string) new ShortClassName($class),
                 'VALUE' => 'a',
-                'CHILDVALUE®' => 'b',
+                'CHILDVALUE' => 'b',
             ],
             $normalizationFacade->normalize($class)
         );
