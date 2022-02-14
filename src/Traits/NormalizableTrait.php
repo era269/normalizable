@@ -78,7 +78,8 @@ trait NormalizableTrait
             return [];
         }
         // @codeCoverageIgnoreStart
-        if (is_subclass_of($parentClass, NormalizationFacadeAwareInterface::class)) { //@phpstan-ignore-line
+        //@phpstan-ignore-next-line
+        if (is_subclass_of($parentClass, NormalizationFacadeAwareInterface::class)) {
             parent::setNormalizationFacade( //@phpstan-ignore-line
                 $this->getNormalizationFacade()
             );
