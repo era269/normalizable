@@ -131,7 +131,7 @@ class NormalizableTraitTest extends TestCase
 
         self::assertEquals(
             [
-                '@type' => (string) new ShortClassName($class),
+                '@TYPE' => (string) new ShortClassName($class),
                 'VALUE' => 'a',
                 'CHILDVALUE' => 'b',
             ],
@@ -157,7 +157,7 @@ class NormalizableTraitTest extends TestCase
         };
 
         $expected = [
-            '@type' => (string) new ShortClassName($class),
+            '@TYPE' => (string) new ShortClassName($class),
             'VALUE' => 'a',
             'CHILDVALUE' => 'b',
         ];
@@ -181,7 +181,6 @@ class NormalizableTraitTest extends TestCase
             ]
         );
         $normalizationFacade->normalize($class);
-//        var_dump($class);
         self::assertEquals(
             $expected,
             $normalizationFacade->normalize($class)
