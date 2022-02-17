@@ -43,11 +43,7 @@ final class WithTypeNormalizableNormalizerDecorator implements NormalizerInterfa
     {
         $normalized = $this->decoratedNormalizer->normalize($value);
         if ($value instanceof NormalizableInterface && is_array($normalized)) {
-            $normalized += [
-                $this->getTypeFieldName() => $value instanceof TypeAwareInterface
-                    ? $this->getNormalizationFacade()->normalize($value->getType())
-                    : (string) new ShortClassName($value),
-            ];
+            $normalized += $this->getTypeNormalized($value);
         }
 
         return $normalized;
@@ -56,7 +52,7 @@ final class WithTypeNormalizableNormalizerDecorator implements NormalizerInterfa
     /**
      * @return int|string
      */
-    private function getTypeFieldName()
+    private function getDecoratedTypeFieldName()
     {
         return $this->getNormalizationFacade()->decorate(
             self::FIELD_NAME_TYPE
@@ -69,5 +65,17 @@ final class WithTypeNormalizableNormalizerDecorator implements NormalizerInterfa
         if ($this->decoratedNormalizer instanceof NormalizationFacadeAwareInterface) {
             $this->decoratedNormalizer->setNormalizationFacade($normalizationFacade);
         }
+    }
+
+    /**
+     * @return array<int|string, null|int|float|string|bool|array<int|string, mixed>>
+     */
+    private function getTypeNormalized(NormalizableInterface $value): array
+    {
+        return [
+            $this->getDecoratedTypeFieldName() => $value instanceof TypeAwareInterface
+                ? $this->getNormalizationFacade()->normalize($value->getType())
+                : (string) new ShortClassName($value),
+        ];
     }
 }
