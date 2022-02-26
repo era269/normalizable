@@ -22,7 +22,7 @@ class NormalizationFacade implements NormalizationFacadeInterface
     private $keyDecorator;
 
     /**
-     * @param iterable|NormalizerInterface[] $normalizers
+     * @param iterable<NormalizerInterface>|NormalizerInterface[] $normalizers
      */
     public function __construct(KeyDecoratorInterface $keyDecorator, iterable $normalizers)
     {

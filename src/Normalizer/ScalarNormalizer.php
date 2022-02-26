@@ -5,20 +5,18 @@ declare(strict_types=1);
 namespace Era269\Normalizable\Normalizer;
 
 use Era269\Normalizable\NormalizerInterface;
-use LogicException;
 
-final class FailNormalizer implements NormalizerInterface
+final class ScalarNormalizer implements NormalizerInterface
 {
     public function supports($value): bool
     {
-        return true;
+        return is_null($value)
+            || is_scalar($value);
     }
 
     public function normalize($value)
     {
-        var_dump($value);
-        throw new LogicException(sprintf(
-            'No Normalizers found'
-        ));
+        /** @var array<int|string, mixed>|bool|float|int|string|null $value */
+        return $value;
     }
 }

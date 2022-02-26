@@ -13,7 +13,8 @@ class DefaultNormalizationFacade extends NormalizationFacade
         parent::__construct(
             new AsIsKeyDecorator(),
             [
-                new NotObjectNormalizer(),
+                new ScalarNormalizer(),
+                new ArrayNormalizer(),
                 new ListNormalizableToNormalizableAdapterNormalizer(),
                 new WithTypeNormalizableNormalizerDecorator(
                     new NormalizableNormalizer()

@@ -6,16 +6,19 @@ namespace Era269\Normalizable\Normalizer;
 
 use Era269\Normalizable\NormalizerInterface;
 
-final class NotObjectNormalizer implements NormalizerInterface
+final class ArrayNormalizer implements NormalizerInterface
 {
     public function supports($value): bool
     {
-        return !is_object($value);
+        return is_array($value);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function normalize($value)
     {
-        /** @var array<int|string, mixed>|bool|float|int|string|null $value */
+        /** @var array<int|string, mixed> $value */
         return $value;
     }
 }

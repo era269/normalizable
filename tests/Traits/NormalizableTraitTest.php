@@ -14,8 +14,8 @@ use Era269\Normalizable\Normalizer\FailNormalizer;
 use Era269\Normalizable\Normalizer\ListNormalizableToNormalizableAdapterNormalizer;
 use Era269\Normalizable\Normalizer\NormalizableNormalizer;
 use Era269\Normalizable\Normalizer\NormalizationFacade;
-use Era269\Normalizable\Normalizer\NotObjectNormalizer;
 use Era269\Normalizable\Normalizer\ScalarableNormalizer;
+use Era269\Normalizable\Normalizer\ScalarNormalizer;
 use Era269\Normalizable\Normalizer\StringableNormalizer;
 use Era269\Normalizable\Normalizer\WithTypeNormalizableNormalizerDecorator;
 use Era269\Normalizable\Object\DateTimeRfc3339Normalizable;
@@ -118,7 +118,7 @@ class NormalizableTraitTest extends TestCase
                 }
             },
             [
-                new NotObjectNormalizer(),
+                new ScalarNormalizer(),
                 new ListNormalizableToNormalizableAdapterNormalizer(),
                 new WithTypeNormalizableNormalizerDecorator(
                     new NormalizableNormalizer()
@@ -170,7 +170,7 @@ class NormalizableTraitTest extends TestCase
                 }
             },
             [
-                new NotObjectNormalizer(),
+                new ScalarNormalizer(),
                 new ListNormalizableToNormalizableAdapterNormalizer(),
                 new WithTypeNormalizableNormalizerDecorator(
                     new NormalizableNormalizer()
