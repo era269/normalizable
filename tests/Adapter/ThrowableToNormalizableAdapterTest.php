@@ -4,6 +4,9 @@ declare(strict_types=1);
 namespace Era269\Normalizable\Tests\Adapter;
 
 use Era269\Normalizable\Adapter\ThrowableToNormalizableAdapter;
+use Era269\Normalizable\NormalizableInterface;
+use Era269\Normalizable\Normalizer\DefaultNormalizationFacade;
+use Era269\Normalizable\Traits\NormalizableTrait;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Throwable;
@@ -11,47 +14,22 @@ use Throwable;
 class ThrowableToNormalizableAdapterTest extends TestCase
 {
     /**
-     * @var Exception
-     */
-    private $throwable;
-    /**
-     * @var ThrowableToNormalizableAdapter
-     */
-    private $adapter;
-
-    public function testNormalize(): void
-    {
-        $normalized = $this->adapter->normalize();
-        $this->assertNormalized(
-            $this->throwable,
-            $normalized,
-            ['file', 'line', 'code', 'message', 'previous'],
-            ['trace']
-        );
-        $this->assertNormalized(
-            $this->throwable->getPrevious(),
-            $normalized['previous'],
-            ['file', 'line', 'code', 'message', 'previous'],
-            ['trace']
-        );
-        $this->assertNormalized(
-            !is_null($this->throwable->getPrevious()) ? $this->throwable->getPrevious()->getPrevious() : null,
-            $normalized['previous']['previous'],
-            ['file', 'line', 'code', 'message', 'trace'],
-            ['previous']
-        );
-    }
-
-    /**
-     * @param array<string, mixed> $normalized
      * @param string[] $hasKeys
      * @param string[] $notHasKeys
+     *
+     * @dataProvider dataProvider
      */
-    private function assertNormalized(?Throwable $throwable, array $normalized, array $hasKeys, array $notHasKeys): void
+    public function testNormalize(Throwable $throwable, array $hasKeys, array $notHasKeys): void
     {
+        $normalized = (new DefaultNormalizationFacade())->normalize(
+            new ThrowableToNormalizableAdapter($throwable)
+        );
+        if (!is_array($normalized)) {
+            self::fail('Throwable has to be normalized into an array');
+        }
         self::assertInstanceOf(Throwable::class, $throwable);
         self::assertEquals(
-            is_object($throwable) ? get_class($throwable) : '',
+            get_class($throwable),
             $normalized['@type']
         );
         foreach ($hasKeys as $hasKey) {
@@ -62,21 +40,38 @@ class ThrowableToNormalizableAdapterTest extends TestCase
         }
     }
 
-    protected function setUp(): void
+    /**
+     * @return array<mixed>
+     */
+    public function dataProvider(): array
     {
-        parent::setUp();
-        $this->throwable = new Exception(
-            'Exception 1',
-            1,
-            new Exception(
-                'Exception 2',
-                2,
-                new Exception(
-                    'Exception 3',
-                    3
-                )
-            )
+        $normalizableExceptionWithoutPrevious = new class extends Exception implements NormalizableInterface {
+            use NormalizableTrait;
+        };
+        $exceptionWithoutPrevious = new Exception();
+        $exceptionWithPreviousNormalizable = new Exception('', 0, $normalizableExceptionWithoutPrevious);
+        $exceptionWithManyPrevious = new Exception(
+            '',
+            0,
+            new Exception('', 0, $normalizableExceptionWithoutPrevious)
         );
-        $this->adapter = new ThrowableToNormalizableAdapter($this->throwable);
+
+        return [
+            [
+                'exception' => $normalizableExceptionWithoutPrevious,
+                'keysPresent' => ['file', 'line', 'code', 'message', 'trace'],
+                'keysNotPresent' => ['previous'],
+            ],
+            [
+                'exception' => $exceptionWithoutPrevious,
+                'keysPresent' => ['file', 'line', 'code', 'message', 'trace'],
+                'keysNotPresent' => ['previous'],
+            ],
+            [
+                'exception' => $exceptionWithPreviousNormalizable,
+                'keysPresent' => ['file', 'line', 'code', 'message', 'previous'],
+                'keysNotPresent' => ['trace'],
+            ],
+        ];
     }
 }
