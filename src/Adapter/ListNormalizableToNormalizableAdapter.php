@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Era269\Normalizable\Adapter;
 
 use Era269\Normalizable\NormalizableInterface;
+use Era269\Normalizable\NormalizationFacadeAwareInterface;
+use Era269\Normalizable\Traits\NormalizableTrait;
 
-final class ListNormalizableToNormalizableAdapter implements NormalizableInterface
+class ListNormalizableToNormalizableAdapter implements NormalizableInterface, NormalizationFacadeAwareInterface
 {
-    private const TYPE = 'array';
+    use NormalizableTrait;
+
     /**
      * @var NormalizableInterface[]
      */
@@ -20,20 +23,10 @@ final class ListNormalizableToNormalizableAdapter implements NormalizableInterfa
     }
 
     /**
-     * @inheritDoc
+     * @return NormalizableInterface[]
      */
-    public function normalize(): array
+    private function getObjectVars(): array
     {
-        return array_map(
-            static function (NormalizableInterface $o): array {
-                return $o->normalize();
-            },
-            $this->objects
-        );
-    }
-
-    public function getType(): string
-    {
-        return self::TYPE;
+        return $this->objects;
     }
 }

@@ -6,12 +6,8 @@ namespace Era269\Normalizable;
 
 interface NormalizableInterface
 {
-    public const DEFAULT_FIELD_NAME_TYPE = '@type';
-
     /**
-     * @return array<string, mixed>
+     * @return array<int|string, null|int|string|bool|array<int|string, mixed>>
      */
     public function normalize(): array;
-
-    public function getType(): string;
 }

@@ -200,6 +200,26 @@ with `NormalizableInterface`. In that case all objects should be supported by th
 
 Will normalize all private object properties by the next rules:
 
+=======
+## Description:
+
+### NormalizableInterface
+
+The basic interface. Could be used separately to build fully manual normalization. How:
+
+1. any objet implements `NormalizableInterface`
+2. It is called object::normalize in `NormalizableInterface::normalize` for all required to be present in normalized
+   view objects
+
+### NormalizableTrait
+
+If it is needed to have all normalization happen automatically then `NormalizableTrait` has to be used
+with `NormalizableInterface`. In that case all objects should be supported by the `DefaultNormalizationFacade`
+
+#### DefaultNormalizationFacade
+
+Will normalize all private object properties by the next rules:
+
 1. `AsIsKeyDecorator` the property name will become the array key without any decorations
 2. all properties will be processed by predefined normalizers:
     1. `NotObjectNormalizer` will return not objects as is
@@ -215,6 +235,6 @@ Will normalize all private object properties by the next rules:
 
 ### NormalizationFacadeAwareInterface
 
-Should be implemented by all Normalizable objects to support the normalization customization. The normalization should
+Should be implenented by all Normalizable objects to support the normalization customization. The normalization should
 be initiated by the custom `NormalizationFacade` implementation and it will be set to all Normalizable objects
 recursively 
