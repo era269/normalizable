@@ -3,209 +3,218 @@
 ![PHP Stan Badge](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat">)
 [![codecov](https://codecov.io/gh/era269/normalizable/branch/main/graph/badge.svg?token=GV9Z0721OI)](https://codecov.io/gh/era269/normalizable)
 
-The main idea is that normalized object is presented as array(including nested) of any combination of scalar values:
+The normalization which is under the object control.
 
-* int
-* float
-* bool
-* string
-* null
+1. All private object properties should be ready for normalization. the normalization process is easy to customize by
+   adding or changing the sequence of the normalizers in the `NormalizationFacade`
+2. To allow the normalization customization Object has to implement the next interfaces:
+    1. `NormalizableInterface`
+    2. `NormalizationFacadeInterface`
 
-Any normalized **ValueObject** can implement **DenormalizableInterface** to give functionality for its restoring from
-the normalized view. In the case with **Domain object** it is not common situation due to complicated logic of creation.
+## Quick Start
 
-The **NormalizableInterface** purpose is to simplify the object normalization in OOP way.
-
-* we are keeping an encapsulation
-* no additional serializers needed. But could be used in pair
-* no performance penalty
-
-However, it is needed to extract internals of the object when we are returning the http response with it. Keeping in
-mind that object has to know ins normalized structure and to avoid an extra getters, which are destroying the
-encapsulation, we can use **NormalizableInterface**.
-
-The normalized view can be used in any communication on Infrastructure level like requests to the DB or any protocol
-based messages (HTTP, AMQP, ...)
-
-## Examples
-
-### Simple Normalization
-
-If all object properties are scalar `or` ScalarableInterface `or` NormalizableInterface `or` Stringable (
-has `__toString`) then:
-**SimpleNormalizableTrait** will do everything automatically
+#### Having:
 
 ```php
 <?php
-
-use Era269\Normalizable\NormalizableInterface;
-use Era269\Normalizable\Object\DateTimeImmutableRfc3339Normalizable;
-use Era269\Normalizable\Traits\SimpleNormalizableTrait;
-
-final class DomainEvent implements NormalizableInterface
+abstract class BaseEvent
 {
-    use SimpleNormalizableTrait;
-
     /**
      * @var string
      */
-    private $name;
+    private $id
     /**
-     * @var DateTimeImmutableRfc3339Normalizable
+     * @var DateTimeInterface
      */
-    private $occurredAt;
+     private $occurredAt
 
-    public function __construct(string $name)
+    public function __construct()
     {
-        $this->occurredAt = (new DateTimeImmutableRfc3339Normalizable());
-        $this->name = $name;
+        $this->id = uniqid();
+        $this->occurredAt = new DateTimeImmutable();
     }
     
-    public function getName(): string
+    public  function getId(): string
     {
-        return $this->name;
+        return $this->id;
     }
     
-    public function getOccurredAt(): DateTimeInterface
+    public  function getOccurredAt(): DateTimeInterface
     {
         return $this->occurredAt;
     }
 }
 
-$event = new DomainEvent('first');
-
-echo json_encode($event->normalize());
-
-```
-
-output:
-
-```json
+final class FileCreatedEvent extends BaseEvent
 {
-  "@type": "DomainEvent",
-  "name": "first",
-  "occurredAt": {
-    "@type": "\\Era269\\Normalizable\\Object\\DateTimeImmutableRfc3339Normalizable",
-    "dateTime": "2021-02-06T20:07:55.621766+0000"
-  }
+    /**
+     * @var string
+     */
+     private $title;
+
+     public function __construct(string $title)
+     {    
+         $this->title = $title;
+     }
 }
 ```
 
-### Exception normalization
+#### To make **FileCreatedEvent** normalizable needed:
 
-* Adapter is valuable only in the case when it is not supposed to denormalize the normalized data. The best example
-  in **ThrowableToNormalizableAdapter**.
+1. `use NormalizableTrait`
+    1. by `FileCreatedEvent` to normalize **title** as normalization happens only in the frames of current visibility
+       bounds
+    2. by `BaseEvent` to normalize **occurredAt** and **id**
+2. implement `NormalizableInterface` by **BaseEvent**
+3. make properties Normalizable:
+    1. replace DateTime with **DateTimeImmutableRfc3339Normalizable** or do normalization manually
 
-#### Domain exception extending
+```php
+abstract class BaseEvent implements \Era269\Normalizable\NormalizableInterface
+{
+    use \Era269\Normalizable\Traits\NormalizableTrait;
+    /**
+     * @var string
+     */
+    private $id;
+    /**
+     * @var DateTimeImmutableRfc3339Normalizable
+     */
+     private $occurredAt;
+
+    public function __construct()
+    {
+        $this->id = uniqid();
+        $this->occurredAt = new DateTimeImmutableRfc3339Normalizable();
+    }
+
+    public  function getId(): string
+    {
+        return $this->id;
+    }
+
+    public  function getOccurredAt(): DateTimeInterface
+    {
+        return $this->occurredAt;
+    }
+}
+
+final class FileCreatedEvent extends BaseEvent
+{
+    use \Era269\Normalizable\Traits\NormalizableTrait;
+
+    /**
+     * @var string
+     */
+    private $title;
+
+    public function __construct(string $title)
+    {
+        parent::__construct();
+        $this->title = $title;
+    }
+}
+
+$event = new FileCreatedEvent('BBB');
+print_r($event->normalize());
+```
+
+#### output:
+
+```bash
+Array
+(
+    [@type] => FileCreatedEvent
+    [id] => 6236f3ab706df
+    [occurredAt] => Array
+        (
+            [@type] => DateTimeImmutableRfc3339Normalizable
+            [dateTime] => 2022-03-20T09:28:11+00:00
+        )
+
+    [title] => BBB
+)
+```
+
+#### To customise output you need
+
+1. implement `NormalizationFacadeAwareInterface`
+2. create own Normalization strategy using the DefaultNormalizationFacade as example
+    1. use `CamelCaseToSnackCaseKeyDecorator` or own implementation to decorate keys
+    2. change the order of Normalizers, remove unneeded ar add own to influence the normalization
+
+#### Customised normalization config
 
 ```php
 <?php
+$event = new FileCreatedEvent('BBB');
+$normalizationFacade = new \Era269\Normalizable\Normalizer\NormalizationFacade(
+    new \Era269\Normalizable\KeyDecorator\CamelCaseToSnackCaseKeyDecorator(),
+    [
+        new ScalarNormalizer(), // do not decorate scalar values
+        new StringableNormalizer(), // use casting on stringable
+        new NormalizableNormalizer(), // call normalize() if normalizable
+        new FailNormalizer(), // throw an exception if no supported normalizer found
+    ]
+);
 
-use Era269\Normalizable\Adapter\ThrowableToNormalizableAdapter;use Era269\Normalizable\NormalizableInterface;
-
-final class ModelNotFoundException extends RuntimeException implements NormalizableInterface
-{
-    private $modelId;
-    private $modelClassName;
-    
-    public function __construct($modelId, $modelClassName, Throwable $previous)
-    {
-        parent::__construct('Model not found.', 0, $previous);
-        $this->modelId = $modelId;
-        $this->modelClassName = $modelClassName;
-    }
-    
-    public function normalize() : array
-    {
-        return (new ThrowableToNormalizableAdapter($this))->normalize() + [
-             'model' => $this->modelClassName,
-             'modelId' => $this->modelId,
-        ];
-    }
-    
-    public function getType(): string
-    {
-        return self::class;
-    }
-}
-
+print_r($normalizationFacade->normalize($event));
+//or
+$event->setNormalizationFacade($normalizationFacade);
+print_r($event->normalize());
 ```
 
-#### Serializer integration
+#### output:
 
-```php
-<?php
-
-use Era269\Normalizable\Adapter\ThrowableToNormalizableAdapter;
-
-final class ExceptionNormalizer implements NormalizerInterface
-{    
-    public function normalize($object) : array
-    {
-        /** @var Throwable $object */
-        return (new ThrowableToNormalizableAdapter($object))->normalize();
-    }
-    
-    public function supports(string $type): bool
-    {
-        return Throwable::class === $type;
-    }
-    
-}
-
+```bash
+Array
+(
+    [id] => 6236f74d4ca26
+    [occurred_at] => 2022-03-20T09:43:41+00:00
+    [title] => BBB
+)
+Array
+(
+    [id] => 6236f74d4ca26
+    [occurred_at] => 2022-03-20T09:43:41+00:00
+    [title] => BBB
+)
 ```
 
-### Domain model normalization
+## Description:
 
-```php
-<?php
+### NormalizableInterface
 
-use Era269\Normalizable\DenormalizableInterface;use Era269\Normalizable\NormalizableInterface;use Era269\Normalizable\Object\DateTimeRfc3339Normalizable;use Era269\Normalizable\Traits\AbstractNormalizableTrait;
+The basic interface. Could be used separately to build fully manual normalization. How:
 
-final class DomainEvent implements NormalizableInterface, DenormalizableInterface
-{
-    use AbstractNormalizableTrait;
+1. any objet implements `NormalizableInterface`
+2. It is called object::normalize in `NormalizableInterface::normalize` for all required to be present in normalized
+   view objects
 
-    private $name;
+### NormalizableTrait
 
-    private $createdAt;
+If it is needed to have all normalization happen automatically then `NormalizableTrait` has to be used
+with `NormalizableInterface`. In that case all objects should be supported by the `DefaultNormalizationFacade`
 
-    public function __construct(string $name)
-    {
-        $this->createdAt = (new DateTimeRfc3339Normalizable());
-        $this->name = $name;
-    }
-    
-    protected function getNormalized() : array
-    {
-        return [
-            'name' => $this->name,
-            'createdAt' => $this->createdAt->normalize(),
-        ];
-    }
-    public static function denormalize(array $data) : static //since php 8.0
-    {
-        $self = new self($data['name']);
-        $self->createdAt = DateTimeRfc3339Normalizable::denormalize($data);
-        return $self;
-    }
-}
+#### DefaultNormalizationFacade
 
-$event = new DomainEvent('first');
+Will normalize all private object properties by the next rules:
 
-echo json_encode($event->normalize());
+1. `AsIsKeyDecorator` the property name will become the array key without any decorations
+2. all properties will be processed by predefined normalizers:
+    1. `NotObjectNormalizer` will return not objects as is
+    2. `ListNormalizableToNormalizableAdapterNormalizer` will process the array of normalizable objects
+        1. all keys will be left as is `AsIsKeyDecorator`
+        2. all values will be processed in according to the current rules by `DefaultNormalizationFacade`
+    3. `NormalizableNormalizer` will call `NormalizableInterface::normalize`
+    4. `WithTypeNormalizableNormalizerDecorator` is decorates the `NormalizableNormalizer` to add `@type` field with
+       ShortClassName of normalized object
+    5. `ScalarableNormalizer` will get the scalar value in object implements `ScalarableInterface`
+    6. `StringableNormalizer` will get the scalar value in object implements `StringableInterface`
+    7. and the last one is `FailNormalizer` which wil throw an exception if no Normalizer was found
 
-```
+### NormalizationFacadeAwareInterface
 
-output:
-
-```json
-{
-  "@type": "DomainEvent",
-  "name": "first",
-  "createdAt": {
-    "@type": "\\Era269\\Normalizable\\Object\\DateTimeRfc3339Normalizable",
-    "dateTime": "2021-02-06T20:07:55.621766+0000"
-  }
-}
-```
+Should be implemented by all Normalizable objects to support the normalization customization. The normalization should
+be initiated by the custom `NormalizationFacade` implementation and it will be set to all Normalizable objects
+recursively 
